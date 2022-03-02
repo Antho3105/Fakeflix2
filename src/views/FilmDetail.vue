@@ -1,6 +1,6 @@
 <template>
   <main>
-    <section v-if="movieData.id" class="conteneur">
+    <section v-if="movieData.id && adultConsent === true" class="conteneur">
       <div class="flex" id="details">
         <img :src="getUrl()" alt="" />
         <div class="movieData">
@@ -22,6 +22,22 @@
           </div>
         </div>
       </div>
+
+      <div v-if="movieVideoKey" id="trailer">
+        <iframe
+          :src="getVideoURL()"
+          title="YouTube video player"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+        ></iframe>
+      </div>
+      <div v-else id="trailer">
+        <p>Pas de bande annonce pour ce film</p>
+      </div>
+    </section>
+    <section v-else-if="adultConsent === false" class="conteneur">
+      <h2>Contenu bloqué</h2>
     </section>
   </main>
 </template>
@@ -34,6 +50,8 @@ export default {
   data: function () {
     return {
       movieData: {},
+      movieVideoKey: "",
+      adultConsent: null,
     };
   },
   computed: {
@@ -61,17 +79,38 @@ export default {
   },
   created: function () {
     this.dataMovie();
+    this.dataVideo();
   },
   methods: {
-    dataMovie: function () {
-      fetch(
+    dataMovie: async function () {
+      await fetch(
         `${this.$store.state.apiUrl}movie/${this.$route.params.id}?${this.$store.state.apiKey}&${this.$store.state.language}`
       )
         .then((response) => response.json())
         .then((json) => (this.movieData = json));
+      this.checkAdult();
+    },
+    dataVideo: function () {
+      fetch(
+        `${this.$store.state.apiUrl}movie/${this.$route.params.id}/videos?${this.$store.state.apiKey}&${this.$store.state.language}`
+      )
+        .then((response) => response.json())
+        .then((json) => (this.movieVideoKey = json.results[0].key))
+        .catch((e) => console.log("erreur " + e));
     },
     getUrl: function () {
       return `https://image.tmdb.org/t/p/w500/${this.movieData.poster_path}`;
+    },
+    getVideoURL: function () {
+      return `https://www.youtube.com/embed/` + this.movieVideoKey;
+    },
+    checkAdult: function () {
+      if (this.movieData.adult) {
+        if (confirm("contenu adulte")) {
+          this.adultConsent = true;
+        } else this.adultConsent = false;
+      }
+      this.adultConsent = true;
     },
   },
 };
@@ -90,5 +129,16 @@ img {
 .buttons {
   padding-top: 20px;
   justify-content: space-around;
+}
+iframe {
+  display: block;
+  border: none;
+  width: 90%;
+  height: calc(100vw * 0.3);
+  margin: auto;
+}
+#trailer {
+  text-align: center;
+  font-size: 22px;
 }
 </style>

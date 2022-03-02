@@ -28,6 +28,9 @@ export default {
 
   methods: {
     search: function () {
+      if (this.$route.path != "/") {
+        this.$router.push({ name: "home" });
+      }
       if (this.searchValue != "") {
         this.$store.commit("updateSearching", true);
         this.$store.commit("updateSearchValue", this.searchValue);
