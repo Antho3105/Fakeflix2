@@ -19,42 +19,29 @@ const routes = [
   {
     path: '/recherche',
     name: 'search',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "search" */ '../views/SearchView.vue')
+    component: () => import('../views/SearchView.vue')
   },
   {
     path: '/mes-favoris',
     name: 'favorite',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "favorite" */ '../views/FavoriteView.vue')
+
+    component: () => import('../views/FavoriteView.vue')
   },
   {
     path: '/films-a-voir',
     name: 'watchlist',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "watchlist" */ '../views/WatchListView.vue')
+    component: () => import('../views/WatchListView.vue')
   },
   {
-    path: '/film',
+    path: '/film/:id',
     name: 'movie',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "movie" */ '../views/FilmDetail.vue')
+
+    component: () => import('../views/FilmDetail.vue')
   },
   {
     path: '/404',
     name: '404',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "movie" */ '../views/404View.vue')
+    component: () => import('../views/404View.vue')
   }
 ]
 

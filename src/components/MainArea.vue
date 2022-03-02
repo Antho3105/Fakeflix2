@@ -7,7 +7,7 @@
         v-bind:key="movie.id"
         :id="movie.id"
       >
-        <a v-if="movie.poster_path" href="#">
+        <a v-if="movie.poster_path" :href="/film/ + movie.id">
           <img :src="url(movie.poster_path)" alt="" />
         </a>
         <a v-else href="#">
