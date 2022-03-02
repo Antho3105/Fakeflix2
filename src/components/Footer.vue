@@ -27,9 +27,8 @@ export default {
   justify-content: center;
 }
 footer {
-  position: sticky;
+  position: fixed;
   bottom: 0;
-  width: 100%;
   background-color: #343a40;
   width: 100%;
 }

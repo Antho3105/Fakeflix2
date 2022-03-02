@@ -105,12 +105,13 @@ export default {
       return `https://www.youtube.com/embed/` + this.movieVideoKey;
     },
     checkAdult: function () {
-      if (this.movieData.adult) {
-        if (confirm("contenu adulte")) {
+      if (this.movieData.adult === true) {
+        if (confirm("contenu adulte") === true) {
           this.adultConsent = true;
-        } else this.adultConsent = false;
-      }
-      this.adultConsent = true;
+        } else {
+          this.adultConsent = false;
+        }
+      } else this.adultConsent = true;
     },
   },
 };
@@ -125,6 +126,9 @@ img {
 }
 .movieData {
   width: 65%;
+}
+section {
+  margin-bottom: 70px;
 }
 .buttons {
   padding-top: 20px;

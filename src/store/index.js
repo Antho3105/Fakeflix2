@@ -13,6 +13,7 @@ export default new Vuex.Store({
     searchType: "",
     searchValue: "",
     searchResult: [],
+    loading: false,
   },
   getters: {
 
@@ -30,13 +31,18 @@ export default new Vuex.Store({
     updateSearchType(state, value) {
       state.searchType = value
     },
+    updateLoading(state, value) {
+      state.loading = value
+    }
   },
   actions: {
-    search: function () {
+    search: async function () {
       if (this.state.searchValue) {
-        fetch(`${this.state.apiUrl}search/${this.state.searchType}?${this.state.apiKey}&${this.state.language}&query=${this.state.searchValue}&page=1&${this.state.adult}`)
+        this.commit("updateLoading", true)
+        await fetch(`${this.state.apiUrl}search/${this.state.searchType}?${this.state.apiKey}&${this.state.language}&query=${this.state.searchValue}&page=1&${this.state.adult}`)
           .then((response) => response.json())
           .then((json) => this.commit("updateSearchResult", json.results));
+        this.commit("updateLoading", false);
       } else this.commit("updateSearchResult", "")
     },
   },
