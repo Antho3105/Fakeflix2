@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section id="column">
     <p>Zone colonne</p>
   </section>
 </template>
@@ -12,9 +12,12 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-section {
+#column {
   width: 30%;
+  text-align: center;
+  font-size: 30px;
 }
+
 * {
   color: white;
 }

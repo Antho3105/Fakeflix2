@@ -10,7 +10,7 @@
       <h1><router-link to="/">FAKEFLIX</router-link></h1>
       <div id="nav">
         <div class="flex conteneur">
-          <nav>
+          <nav class="flex">
             <router-link to="/">Accueil</router-link> |
             <router-link to="/recherche">Recherche</router-link> |
             <router-link to="/mes-favoris">Favoris</router-link> |
@@ -19,10 +19,7 @@
             <router-link to="/404">404</router-link> |
             <router-link to="/login">Login</router-link>
           </nav>
-          <div>
-            <input type="text" placeholder="chercher un film" />
-            <button>chercher</button>
-          </div>
+          <SearchArea />
         </div>
       </div>
     </header>
@@ -36,10 +33,11 @@
 
 <script>
 import SiteFooter from "./components/Footer.vue";
-
+import SearchArea from "./components/Search.vue";
 export default {
   components: {
     SiteFooter,
+    SearchArea,
   },
 };
 </script>
@@ -70,6 +68,9 @@ main {
   color: red;
   background-color: #343a40;
 }
+nav {
+  align-items: center;
+}
 
 header h1 a {
   font-weight: 300;
@@ -79,6 +80,7 @@ header h1 a {
 header a {
   color: white;
   text-decoration: none;
+  padding: 5px 10px;
 }
 
 #nav a.router-link-exact-active {

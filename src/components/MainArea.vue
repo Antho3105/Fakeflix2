@@ -1,5 +1,5 @@
 <template>
-  <section v-if="searchResult.length > 0" class="search">
+  <section v-if="searching && searchResult.length > 0" class="search">
     <h2>Resultats de recherche pour : {{ searchValue }}</h2>
     <div class="flex">
       <figure
@@ -10,16 +10,18 @@
         <a v-if="movie.poster_path" href="#">
           <img :src="url(movie.poster_path)" alt="" />
         </a>
-        <a v-else href="#"
-          ><p>image non disponible</p>
-          <i class="fa-solid fa-film"></i
-        ></a>
+        <a v-else href="#">
+          <img :src="require('@/Images/image-non-disponible.png')" alt="" />
+        </a>
         <figcaption>{{ movie.title }}</figcaption>
       </figure>
     </div>
   </section>
-  <section v-else class="search">
-    <p>toto</p>
+  <section v-else-if="searching && searchResult.length == 0" class="search">
+    <h2>Il n y'a aucun résultat pour : {{ searchValue }}</h2>
+  </section>
+  <section v-else class="home">
+    <p>Bienvenue sur le site FakeFlix</p>
   </section>
 </template>
 
@@ -30,7 +32,7 @@ export default {
   data() {
     return {};
   },
-  computed: mapState(["searchResult", "searchValue"]),
+  computed: mapState(["searchResult", "searchValue", "searching"]),
   methods: {
     url: function (link) {
       return `https://image.tmdb.org/t/p/w500/${link}`;
@@ -40,7 +42,8 @@ export default {
 </script>
 
 <style scoped>
-.search {
+.search,
+.home {
   width: 70%;
   text-align: left;
 }
@@ -48,6 +51,10 @@ figure {
   width: 150px;
   margin: 15px 5px;
   text-align: center;
+}
+
+.home {
+  font-size: 30px;
 }
 
 figure a {
