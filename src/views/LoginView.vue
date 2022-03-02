@@ -1,14 +1,14 @@
 <template>
   <main>
-    <section id="home" class="conteneur">
-      <h1>Accueil</h1>
+    <section id="Login" class="conteneur">
+      <h1>Page de login</h1>
     </section>
   </main>
 </template>
 
 <script>
 export default {
-  name: "HomeView",
+  name: "LoginView",
   components: {},
 };
 </script>
