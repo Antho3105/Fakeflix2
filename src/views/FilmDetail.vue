@@ -1,6 +1,11 @@
 <template>
   <main>
-    <section v-if="movieData.id && adultConsent === true" class="conteneur">
+    <section
+      v-if="
+        movieData.id && adultConsent === true && this.$route.path != '/film'
+      "
+      class="conteneur"
+    >
       <div class="flex" id="details">
         <img :src="getUrl()" alt="" />
         <div class="movieData">
@@ -39,6 +44,7 @@
     <section v-else-if="adultConsent === false" class="conteneur">
       <h2>Contenu bloqué</h2>
     </section>
+    <section v-else class="conteneur"><p>toto</p></section>
   </main>
 </template>
 
@@ -83,20 +89,24 @@ export default {
   },
   methods: {
     dataMovie: async function () {
-      await fetch(
-        `${this.$store.state.apiUrl}movie/${this.$route.params.id}?${this.$store.state.apiKey}&${this.$store.state.language}`
-      )
-        .then((response) => response.json())
-        .then((json) => (this.movieData = json));
-      this.checkAdult();
+      if (this.$route.path != "/film") {
+        await fetch(
+          `${this.$store.state.apiUrl}movie/${this.$route.params.id}?${this.$store.state.apiKey}&${this.$store.state.language}`
+        )
+          .then((response) => response.json())
+          .then((json) => (this.movieData = json));
+        this.checkAdult();
+      }
     },
     dataVideo: function () {
-      fetch(
-        `${this.$store.state.apiUrl}movie/${this.$route.params.id}/videos?${this.$store.state.apiKey}&${this.$store.state.language}`
-      )
-        .then((response) => response.json())
-        .then((json) => (this.movieVideoKey = json.results[0].key))
-        .catch((e) => console.log("erreur " + e));
+      if (this.$route.path != "/film") {
+        fetch(
+          `${this.$store.state.apiUrl}movie/${this.$route.params.id}/videos?${this.$store.state.apiKey}&${this.$store.state.language}`
+        )
+          .then((response) => response.json())
+          .then((json) => (this.movieVideoKey = json.results[0].key))
+          .catch((e) => console.log("erreur " + e));
+      }
     },
     getUrl: function () {
       return `https://image.tmdb.org/t/p/w500/${this.movieData.poster_path}`;

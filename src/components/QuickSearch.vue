@@ -1,23 +1,23 @@
 <template>
   <div id="search">
     <input
-      placeholder="Chercher un film"
+      placeholder="Recherche rapide"
       type="text"
       v-model="searchValue"
       @keypress.enter="search()"
       @input="search()"
     />
-    <select name="type" id="" v-model="searchType">
+    <!-- <select name="type" id="" v-model="searchType">
       <option value="movie">Films</option>
       <option value="tv">Séries TV</option>
       <option value="person">Acteurs</option>
-    </select>
+    </select> -->
   </div>
 </template>
 
 <script>
 export default {
-  name: "SearchArea",
+  name: "QuickSearch",
   data() {
     return {
       searchValue: "",
@@ -28,8 +28,8 @@ export default {
 
   methods: {
     search: function () {
-      if (this.$route.path != "/") {
-        this.$router.push({ name: "home" });
+      if (this.$route.path != "/recherche") {
+        this.$router.push({ name: "search" });
       }
       if (this.searchValue != "") {
         this.$store.commit("updateSearching", true);

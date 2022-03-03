@@ -12,13 +12,13 @@
         <div class="flex conteneur">
           <nav class="flex">
             <router-link to="/">Accueil</router-link> |
+            <router-link to="/recherche">Recherche</router-link> |
             <router-link to="/mes-favoris">Favoris</router-link> |
             <router-link to="/films-a-voir">Films à voir</router-link> |
-            <router-link to="/film">Détail film</router-link> |
             <router-link to="/404">404</router-link> |
             <router-link to="/login">Login</router-link>
           </nav>
-          <SearchArea />
+          <QuickSearch />
         </div>
       </div>
     </header>
@@ -32,11 +32,11 @@
 
 <script>
 import SiteFooter from "./components/Footer.vue";
-import SearchArea from "./components/Search.vue";
+import QuickSearch from "./components/QuickSearch.vue";
 export default {
   components: {
     SiteFooter,
-    SearchArea,
+    QuickSearch,
   },
 };
 </script>
@@ -86,5 +86,8 @@ header a {
 #nav a.router-link-exact-active {
   color: red;
   font-weight: bold;
+}
+#nav a {
+  transition: all 0.2s ease-in-out;
 }
 </style>

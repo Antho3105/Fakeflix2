@@ -34,9 +34,15 @@ const routes = [
   },
   {
     path: '/film/:id',
-    name: 'movie',
+    name: 'moviedetail',
 
     component: () => import('../views/FilmDetail.vue')
+  },
+  {
+    path: '/recherche',
+    name: 'movie',
+
+    component: () => import('../views/SearchView.vue')
   },
   {
     path: '/404',
