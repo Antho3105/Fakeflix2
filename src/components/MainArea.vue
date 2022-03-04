@@ -23,7 +23,6 @@ export default {
   text-align: left;
   background-repeat: no-repeat;
   background-size: contain;
-  margin-bottom: 60px;
   font-size: 30px;
 }
 * {

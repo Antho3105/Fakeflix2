@@ -6,27 +6,29 @@
       "
       class="conteneur"
     >
-      <div class="flex" id="details">
-        <img :src="getUrl()" alt="" />
-        <div class="movieData">
-          <h2>{{ movieData.original_title }}</h2>
-          <p>Date de sortie : {{ dateSortie }}</p>
-          <p>Durée : {{ length }}</p>
-          <h3>Résumé</h3>
-          <p>{{ movieData.overview }}</p>
-          <h3>Information :</h3>
-          <ul>
-            <li>Budget : {{ budget }} $</li>
-            <li>Popularité : {{ movieData.popularity }}</li>
-            <li>note : {{ movieData.vote_average }}</li>
-            <li>Nombre de vote : {{ movieData.vote_count }}</li>
-          </ul>
-          <div class="flex buttons">
-            <button>Ajouter à mes favoris</button>
-            <button>Ajouter aux films à voir</button>
+      <transition name="appear">
+        <div class="flex" id="details">
+          <img :src="getUrl()" alt="" />
+          <div class="movieData">
+            <h2>{{ movieData.original_title }}</h2>
+            <p>Date de sortie : {{ dateSortie }}</p>
+            <p>Durée : {{ length }}</p>
+            <h3>Résumé</h3>
+            <p>{{ movieData.overview }}</p>
+            <h3>Information :</h3>
+            <ul>
+              <li>Budget : {{ budget }} $</li>
+              <li>Popularité : {{ movieData.popularity }}</li>
+              <li>note : {{ movieData.vote_average }}</li>
+              <li>Nombre de vote : {{ movieData.vote_count }}</li>
+            </ul>
+            <div class="flex buttons">
+              <button>Ajouter à mes favoris</button>
+              <button>Ajouter aux films à voir</button>
+            </div>
           </div>
         </div>
-      </div>
+      </transition>
 
       <div v-if="movieVideoKey" id="trailer">
         <iframe
@@ -96,8 +98,9 @@ export default {
           .then((response) => response.json())
           .then((json) => (this.movieData = json));
         this.checkAdult();
-      }
+      } else this.$router.push({ name: "search" });
     },
+
     dataVideo: function () {
       if (this.$route.path != "/film") {
         fetch(
@@ -154,5 +157,14 @@ iframe {
 #trailer {
   text-align: center;
   font-size: 22px;
+}
+
+.appear-enter-active,
+.appear-leave-active {
+  transition: all 1s ease-in-out;
+}
+.appear-enter,
+.appear-leave-to {
+  transform: scale(0);
 }
 </style>

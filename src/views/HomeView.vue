@@ -23,7 +23,7 @@ export default {
 <style>
 body {
   min-height: 90vh;
-  background-image: url("../../src/Images/background.jpg");
+  background-image: url("@/Images/background.jpg");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: bottom center;

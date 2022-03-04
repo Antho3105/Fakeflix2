@@ -5,6 +5,11 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    server: process.env.VUE_APP_SERVER,
+    version: process.env.VUE_APP_VERSION,
+    appId: process.env.VUE_APPID,
+
+
     apiUrl: "https://api.themoviedb.org/3/",
     apiKey: "api_key=37b69fbb862d94bb3f20580f85d6dca7",
     language: "language=fr-FR",
@@ -14,6 +19,7 @@ export default new Vuex.Store({
     searchValue: "",
     searchResult: [],
     loading: false,
+    carouselData: [],
   },
   getters: {
 
@@ -33,6 +39,9 @@ export default new Vuex.Store({
     },
     updateLoading(state, value) {
       state.loading = value
+    },
+    updateCarouselData(state, value) {
+      state.carouselData = value
     }
   },
   actions: {
@@ -45,6 +54,11 @@ export default new Vuex.Store({
         this.commit("updateLoading", false);
       } else this.commit("updateSearchResult", "")
     },
+    getCarouselData: function () {
+      fetch(`${this.state.apiUrl}discover/movie?${this.state.apiKey}&${this.state.language}&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_watch_monetization_types=flatrate`)
+        .then((response) => response.json())
+        .then((json) => this.commit("updateCarouselData", json.results));
+    }
   },
   modules: {
   }

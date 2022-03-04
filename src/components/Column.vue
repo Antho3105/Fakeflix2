@@ -1,23 +1,25 @@
 <template>
   <section id="column">
-    <p>Zone colonne</p>
+    <CarouselVue />
   </section>
 </template>
 
 <script>
+import CarouselVue from "@/components/Carousel.vue";
 export default {
   name: "SideColumn",
+  components: {
+    CarouselVue,
+  },
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 #column {
-  width: 30%;
+  width: 25%;
   text-align: center;
   font-size: 30px;
 }
-
 * {
   color: white;
 }

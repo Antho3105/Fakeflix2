@@ -7,15 +7,11 @@
       @keypress.enter="search()"
       @input="search()"
     />
-    <!-- <select name="type" id="" v-model="searchType">
-      <option value="movie">Films</option>
-      <option value="tv">Séries TV</option>
-      <option value="person">Acteurs</option>
-    </select> -->
   </div>
 </template>
 
 <script>
+import { debounce } from "debounce";
 export default {
   name: "QuickSearch",
   data() {
@@ -27,7 +23,7 @@ export default {
   computed: {},
 
   methods: {
-    search: function () {
+    search: debounce(function () {
       if (this.$route.path != "/recherche") {
         this.$router.push({ name: "search" });
       }
@@ -40,12 +36,11 @@ export default {
         this.$store.commit("updateSearching", false);
         this.$store.commit("updateSearchValue", this.searchValue);
       }
-    },
+    }, 500),
   },
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 button {
   margin: 10px 10px;

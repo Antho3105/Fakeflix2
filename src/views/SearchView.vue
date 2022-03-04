@@ -1,7 +1,7 @@
 <template>
   <main>
     <section class="conteneur">
-      Zone de recherche detaillée (à construire)
+      Zone de recherche detaillée (composant à construire)
     </section>
     <section
       v-if="searching && searchResult.length > 0"
@@ -24,7 +24,8 @@
           <div></div>
         </div>
       </div>
-      <div class="flex">
+
+      <transition-group name="card" tag="div" class="flex">
         <figure
           v-for="movie of searchResult"
           v-bind:key="movie.id"
@@ -44,7 +45,7 @@
           </router-link>
           <figcaption>{{ movie.title }}</figcaption>
         </figure>
-      </div>
+      </transition-group>
     </section>
     <section
       v-else-if="searching && searchResult.length == 0"
@@ -180,5 +181,19 @@ figcaption {
   100% {
     opacity: 0;
   }
+}
+
+.card-item {
+  display: inline-block;
+}
+.card-enter-active,
+.card-leave-active {
+  transition: all 0.5s ease-in-out;
+}
+.card-enter,
+.card-leave-to {
+  width: 0px;
+  height: 0px;
+  transform: scale(0);
 }
 </style>

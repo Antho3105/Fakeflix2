@@ -15,7 +15,6 @@
             <router-link to="/recherche">Recherche</router-link> |
             <router-link to="/mes-favoris">Favoris</router-link> |
             <router-link to="/films-a-voir">Films à voir</router-link> |
-            <router-link to="/404">404</router-link> |
             <router-link to="/login">Login</router-link>
           </nav>
           <QuickSearch />
@@ -31,8 +30,8 @@
 
 
 <script>
-import SiteFooter from "./components/Footer.vue";
-import QuickSearch from "./components/QuickSearch.vue";
+import SiteFooter from "@/components/Footer.vue";
+import QuickSearch from "@/components/QuickSearch.vue";
 export default {
   components: {
     SiteFooter,
