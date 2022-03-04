@@ -23,14 +23,16 @@
               <li>Nombre de vote : {{ movieData.vote_count }}</li>
             </ul>
             <div class="flex buttons">
-              <button @click="addToFavorites()">Ajouter à mes favoris</button>
-              <button @click="addToWatchList()">
-                Ajouter aux films à voir
+              <button v-if="!isInFavorites" @click="addToFavorites()">
+                Ajouter à mes favoris
               </button>
-              <button @click="removeFromFavorites()">
+              <button v-if="isInFavorites" @click="removeFromFavorites()">
                 Retirer des favoris
               </button>
-              <button @click="removeFromWatchList()">
+              <button v-if="!isInWatchList" @click="addToWatchList()">
+                Ajouter aux films à voir
+              </button>
+              <button v-if="isInWatchList" @click="removeFromWatchList()">
                 Retirer des films à voir
               </button>
             </div>
@@ -60,6 +62,8 @@
 
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
   name: "FilmDetail",
   components: {},
@@ -71,6 +75,7 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(["favoritesFilmsId", "watchListFilmsId"]),
     dateSortie: function () {
       return new Date(this.movieData.release_date).toLocaleDateString("fr-FR", {
         weekday: "long",
@@ -92,6 +97,18 @@ export default {
       str[0] = str[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
       return str.join(".");
     },
+    isInFavorites: function () {
+      return this.favoritesFilmsId.indexOf(parseInt(this.$route.params.id)) ===
+        -1
+        ? false
+        : true;
+    },
+    isInWatchList: function () {
+      return this.watchListFilmsId.indexOf(parseInt(this.$route.params.id)) ===
+        -1
+        ? false
+        : true;
+    },
   },
   created: function () {
     this.dataMovie();
@@ -99,6 +116,7 @@ export default {
     this.$store.dispatch("checkWatchList");
     this.$store.dispatch("checkFavorites");
   },
+
   methods: {
     dataMovie: async function () {
       if (this.$route.path != "/film") {
