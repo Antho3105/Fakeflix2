@@ -91,6 +91,7 @@ export default {
     this.dataMovie();
     this.dataVideo();
     this.$store.dispatch("checkWatchList");
+    this.$store.dispatch("checkFavorites");
   },
   methods: {
     dataMovie: async function () {

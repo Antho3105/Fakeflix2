@@ -24,11 +24,12 @@ export default new Vuex.Store({
     token: "",
     accountId: 0,
     myFavorites: [],
-    myWatchlist: [],
+    myWatchList: [],
     userId: "",
     userPwd: "",
     userName: "",
     isLogged: false,
+    logginError: "",
   },
   getters: {
 
@@ -66,7 +67,8 @@ export default new Vuex.Store({
     updateAccountId(state, value) {
       state.accountId = value.id
       state.userName = value.userName
-      state.isLogged = true
+      if (this.state.accountId != 0) state.isLogged = true
+      else state.isLogged = false
     },
     clearSession(state, value) {
       if (value) {
@@ -85,6 +87,9 @@ export default new Vuex.Store({
     updateMyWatchList(state, value) {
       this.state.myWatchList = value
     },
+    updateLogginError(state, value) {
+      this.state.logginError = value
+    }
 
   },
   actions: {
@@ -108,7 +113,8 @@ export default new Vuex.Store({
         .then((json) => {
           this.commit("updateTokenId", json.request_token);
           this.dispatch("getTokenValidate", { id: this.state.userId, pwd: this.state.userPwd });
-        });
+        })
+        .catch((error) => console.log("erreur " + error));
     },
     getTokenValidate: function (context, user) {
       fetch(`${this.state.apiUrl}authentication/token/validate_with_login?${this.state.apiKey}`, {
@@ -123,11 +129,16 @@ export default new Vuex.Store({
           "request_token": this.state.token
         })
       })
+
         .then((response) => response.json())
         .then((json) => {
-          this.commit("updateTokenId", json.request_token)
-          this.dispatch("getSession", this.state.token);
-        });
+          if (json.success) {
+            this.commit("updateTokenId", json.request_token);
+            this.dispatch("getSession", this.state.token);
+            this.commit("updateLogginError", json.status_message);
+          } else this.commit("updateLogginError", json.status_message)
+        })
+        .catch((e) => console.log("erreur " + e));
     },
     getSession: function (context, token) {
       fetch(`${this.state.apiUrl}authentication/session/new?${this.state.apiKey}`, {
@@ -144,14 +155,16 @@ export default new Vuex.Store({
         .then((json) => {
           this.commit("updateSessionId", json.session_id)
           this.dispatch("getAccountID", this.state.sessionId);
-        });
+        })
+        .catch((e) => console.log("erreur " + e));
     },
     getAccountID: function (context, sessionId) {
       fetch(`${this.state.apiUrl}account?${this.state.apiKey}&session_id=${sessionId}`)
         .then((response) => response.json())
         .then((json) => {
           this.commit("updateAccountId", { id: json.id, userName: json.name })
-        });
+        })
+        .catch((e) => console.log("erreur " + e));
     },
     logout: function () {
       fetch(`${this.state.apiUrl}authentication/session?${this.state.apiKey}`, {
@@ -167,7 +180,8 @@ export default new Vuex.Store({
         .then((response) => response.json())
         .then((json) => {
           if (json.success) this.commit("clearSession", true);
-        });
+        })
+        .catch((e) => console.log("erreur " + e));
     },
     addToFavorite: function (context, id) {
       fetch(`${this.state.apiUrl}account/${this.state.accountId}/favorite?${this.state.apiKey}&session_id=${this.state.sessionId}`, {
@@ -188,7 +202,8 @@ export default new Vuex.Store({
             console.log('Film ajouté aux favoris')
             this.dispatch("updateFavorites")
           }
-        });
+        })
+        .catch((e) => console.log("erreur " + e));
     },
     addToWatchList: function (context, id) {
       fetch(`${this.state.apiUrl}account/${this.state.accountId}/watchlist?${this.state.apiKey}&session_id=${this.state.sessionId}`, {
@@ -209,7 +224,11 @@ export default new Vuex.Store({
             console.log('film ajouté à la WatchList')
             this.dispatch("updateWatchList")
           }
-        });
+        })
+        .catch((e) => console.log("erreur " + e));
+    },
+    checkFavorites: function () {
+      if (this.state.myFavorites.length == 0) this.dispatch("updateFavorites");
     },
     updateFavorites: function () {
       fetch(`${this.state.apiUrl}account/${this.state.accountId}/favorite/movies?${this.state.apiKey}&session_id=${this.state.sessionId}&${this.state.language}&sort_by=created_at.asc&page=1
@@ -217,10 +236,11 @@ export default new Vuex.Store({
         .then((response) => response.json())
         .then((json) => {
           this.commit("updateMyFavorites", json.results)
-        });
+        })
+        .catch((e) => console.log("erreur " + e));
     },
     checkWatchList: function () {
-      if (this.state.myFavorites.length == 0) this.dispatch("updateFavorites");
+      if (this.state.myWatchList.length == 0) this.dispatch("updateWatchList");
     },
     updateWatchList: function () {
       fetch(`${this.state.apiUrl}account/${this.state.accountId}/watchlist/movies?${this.state.apiKey}&session_id=${this.state.sessionId}&${this.state.language}&sort_by=created_at.asc&page=1
@@ -228,7 +248,8 @@ export default new Vuex.Store({
         .then((response) => response.json())
         .then((json) => {
           this.commit("updateMyWatchList", json.results)
-        });
+        })
+        .catch((e) => console.log("erreur " + e));
     },
   },
 

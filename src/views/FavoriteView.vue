@@ -1,7 +1,7 @@
 <template>
   <main>
     <section id="favorites" class="conteneur">
-      <h1>Page des favoris</h1>
+      <h1>Mes films favoris</h1>
       <transition-group name="card" tag="div" class="flex">
         <figure
           v-for="movie of myFavorites"
@@ -37,6 +37,7 @@ export default {
   computed: mapState(["myFavorites"]),
   created: function () {
     this.$store.dispatch("checkWatchList");
+    this.$store.dispatch("checkFavorites");
   },
   methods: {
     url: function (link) {

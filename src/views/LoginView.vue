@@ -1,11 +1,12 @@
 <template>
   <main>
-    <section v-if="!accountId" class="conteneur">
+    <section v-if="!isLogged" class="conteneur">
       <h1>Veuillez vous identifier</h1>
       <div id="login">
         <input id="id" placeholder="Identifiant" type="text" />
         <input id="pwd" placeholder="Mot de passe" type="password" />
         <button @click="authenticate()">Valider</button>
+        <p>{{ logginError }}</p>
       </div>
     </section>
   </main>
@@ -15,7 +16,7 @@
 import { mapState } from "vuex";
 export default {
   name: "LoginView",
-  computed: mapState(["accountId"]),
+  computed: mapState(["isLogged", "logginError"]),
   methods: {
     authenticate: function () {
       this.$store.commit("updateUser", {

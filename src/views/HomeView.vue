@@ -19,6 +19,7 @@ export default {
   },
   created: function () {
     this.$store.dispatch("checkWatchList");
+    this.$store.dispatch("checkFavorites");
   },
 };
 </script>

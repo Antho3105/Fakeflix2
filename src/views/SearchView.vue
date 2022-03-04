@@ -68,6 +68,7 @@ export default {
   },
   created: function () {
     this.$store.dispatch("checkWatchList");
+    this.$store.dispatch("checkFavorites");
   },
   computed: mapState(["searchResult", "searchValue", "searching", "loading"]),
   methods: {
