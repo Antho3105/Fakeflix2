@@ -1,7 +1,8 @@
 <template>
   <main>
     <section class="conteneur">
-      Zone de recherche detaillée (composant à construire)
+      <p>Composant de recherche détaillée à construire</p>
+      <FullSearch />
     </section>
     <section
       v-if="searching && searchResult.length > 0"
@@ -58,8 +59,13 @@
 
 <script>
 import { mapState } from "vuex";
+import FullSearch from "@/components/FullSearch.vue";
+
 export default {
   name: "MainArea",
+  components: {
+    FullSearch,
+  },
   computed: mapState(["searchResult", "searchValue", "searching", "loading"]),
   methods: {
     url: function (link) {

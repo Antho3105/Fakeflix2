@@ -20,11 +20,19 @@ export default new Vuex.Store({
     searchResult: [],
     loading: false,
     carouselData: [],
+    sessionId: "",
+    token: "",
+    accountId: 0,
+    myFavorites: [],
+    myWatchlist: [],
+    userId: "",
+    userPwd: "",
   },
   getters: {
 
   },
   mutations: {
+    //refactoriser en envoyant un objet
     updateSearching(state, value) {
       state.searching = value
     },
@@ -42,7 +50,17 @@ export default new Vuex.Store({
     },
     updateCarouselData(state, value) {
       state.carouselData = value
-    }
+    },
+    updateTokenId(state, value) {
+      state.token = value
+    },
+    updateUser(state, value) {
+      state.userId = value.id
+      state.userPwd = value.pwd
+    },
+    updateSessionId(state, value) {
+      state.sessionId = value
+    },
   },
   actions: {
     search: async function () {
@@ -58,6 +76,53 @@ export default new Vuex.Store({
       fetch(`${this.state.apiUrl}discover/movie?${this.state.apiKey}&${this.state.language}&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_watch_monetization_types=flatrate`)
         .then((response) => response.json())
         .then((json) => this.commit("updateCarouselData", json.results));
+    },
+    getTokenId: function () {
+      fetch(`${this.state.apiUrl}authentication/token/new?${this.state.apiKey}`)
+        .then((response) => response.json())
+        .then((json) => {
+          console.log(json.request_token);
+          this.commit("updateTokenId", json.request_token);
+          this.dispatch("getTokenValidate", { id: this.state.userId, pwd: this.state.userPwd });
+        });
+    },
+    getTokenValidate: function (context, user) {
+      console.log(user)
+      fetch(`${this.state.apiUrl}authentication/token/validate_with_login?${this.state.apiKey}`, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          "username": user.id,
+          "password": user.pwd,
+          "request_token": this.state.token
+        })
+      })
+        .then((response) => response.json())
+        .then((json) => {
+          console.log(json)
+          this.commit("updateTokenId", json.request_token)
+          this.dispatch("getSession", this.state.token);
+        });
+    },
+    getSession: function (context, token) {
+      fetch(`${this.state.apiUrl}authentication/session/new?${this.state.apiKey}`, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          "request_token": token
+        })
+      })
+        .then((response) => response.json())
+        .then((json) => {
+          console.log(json)
+          this.commit("updateSessionId", json.session_id)
+        });
     }
   },
   modules: {

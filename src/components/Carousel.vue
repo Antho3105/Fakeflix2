@@ -1,7 +1,7 @@
 <template>
   <section>
     <h3>Films populaires :</h3>
-    <hooper id="carousel">
+    <hooper :settings="hooperSettings" id="carousel">
       <slide v-for="movie of carouselData" v-bind:key="movie.id">
         <router-link :to="/film/ + movie.id">
           <img v-if="movie.poster_path" :src="url(movie.poster_path)" alt="" />
@@ -29,8 +29,10 @@ export default {
   },
   data: function () {
     return {
-      // playSpeed: 10000,
-      // autoPlay: true,
+      hooperSettings: {
+        autoPlay: true,
+        playSpeed: 5000,
+      },
     };
   },
   computed: mapState(["carouselData"]),
