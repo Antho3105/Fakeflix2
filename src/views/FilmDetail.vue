@@ -27,6 +27,12 @@
               <button @click="addToWatchList()">
                 Ajouter aux films à voir
               </button>
+              <button @click="removeFromFavorites()">
+                Retirer des favoris
+              </button>
+              <button @click="removeFromWatchList()">
+                Retirer des films à voir
+              </button>
             </div>
           </div>
         </div>
@@ -131,10 +137,28 @@ export default {
       } else this.adultConsent = true;
     },
     addToFavorites: function () {
-      this.$store.dispatch("addToFavorite", this.$route.params.id);
+      this.$store.dispatch("Favorites", {
+        id: this.$route.params.id,
+        status: true,
+      });
+    },
+    removeFromFavorites: function () {
+      this.$store.dispatch("Favorites", {
+        id: this.$route.params.id,
+        status: false,
+      });
     },
     addToWatchList: function () {
-      this.$store.dispatch("addToWatchList", this.$route.params.id);
+      this.$store.dispatch("WatchList", {
+        id: this.$route.params.id,
+        status: true,
+      });
+    },
+    removeFromWatchList: function () {
+      this.$store.dispatch("WatchList", {
+        id: this.$route.params.id,
+        status: false,
+      });
     },
   },
 };

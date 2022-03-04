@@ -6,7 +6,7 @@
         <input id="id" placeholder="Identifiant" type="text" />
         <input id="pwd" placeholder="Mot de passe" type="password" />
         <button @click="authenticate()">Valider</button>
-        <p>{{ logginError }}</p>
+        <p>{{ loggingError }}</p>
       </div>
     </section>
   </main>
@@ -15,8 +15,8 @@
 <script>
 import { mapState } from "vuex";
 export default {
-  name: "LoginView",
-  computed: mapState(["isLogged", "logginError"]),
+  name: "LoggingView",
+  computed: mapState(["isLogged", "loggingError"]),
   methods: {
     authenticate: function () {
       this.$store.commit("updateUser", {

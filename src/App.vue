@@ -21,7 +21,7 @@
         </div>
       </div>
     </header>
-    <LoginView v-if="!isLogged" />
+    <LoggingView v-if="!isLogged" />
     <router-view v-if="isLogged" />
     <SiteFooter />
   </body>
@@ -34,13 +34,13 @@
 import { mapState } from "vuex";
 import SiteFooter from "@/components/Footer.vue";
 import QuickSearch from "@/components/QuickSearch.vue";
-import LoginView from "@/views/LoginView.vue";
+import LoggingView from "@/views/LoggingView.vue";
 
 export default {
   components: {
     SiteFooter,
     QuickSearch,
-    LoginView,
+    LoggingView,
   },
   computed: mapState(["isLogged"]),
   created: function () {},

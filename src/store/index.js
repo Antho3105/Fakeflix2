@@ -29,10 +29,15 @@ export default new Vuex.Store({
     userPwd: "",
     userName: "",
     isLogged: false,
-    logginError: "",
+    loggingError: "",
   },
   getters: {
-
+    favoritesFilmsId(state) {
+      return (state.myFavorites.length > 0) ? state.myFavorites.map(movie => movie.id) : [];
+    },
+    watchListFilmsId(state) {
+      return (state.myWatchList.length > 0) ? state.myWatchList.map(movie => movie.id) : [];
+    },
   },
   mutations: {
     //refactoriser en envoyant un objet
@@ -87,12 +92,13 @@ export default new Vuex.Store({
     updateMyWatchList(state, value) {
       this.state.myWatchList = value
     },
-    updateLogginError(state, value) {
-      this.state.logginError = value
+    updateLoggingError(state, value) {
+      this.state.loggingError = value
     }
 
   },
   actions: {
+    // recherche films
     search: async function () {
       if (this.state.searchValue) {
         this.commit("updateLoading", true)
@@ -102,11 +108,16 @@ export default new Vuex.Store({
         this.commit("updateLoading", false);
       } else this.commit("updateSearchResult", "")
     },
+    // recuperation fe films pour le carrousel
     getCarouselData: function () {
       fetch(`${this.state.apiUrl}discover/movie?${this.state.apiKey}&${this.state.language}&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_watch_monetization_types=flatrate`)
         .then((response) => response.json())
         .then((json) => this.commit("updateCarouselData", json.results));
     },
+
+    //-----------------------------------------
+    //------ Début zone d'autentification------
+    //-----------------------------------------
     getTokenId: function () {
       fetch(`${this.state.apiUrl}authentication/token/new?${this.state.apiKey}`)
         .then((response) => response.json())
@@ -135,8 +146,8 @@ export default new Vuex.Store({
           if (json.success) {
             this.commit("updateTokenId", json.request_token);
             this.dispatch("getSession", this.state.token);
-            this.commit("updateLogginError", json.status_message);
-          } else this.commit("updateLogginError", json.status_message)
+            this.commit("updateLoggingError", json.status_message);
+          } else this.commit("updateLoggingError", json.status_message)
         })
         .catch((e) => console.log("erreur " + e));
     },
@@ -166,6 +177,13 @@ export default new Vuex.Store({
         })
         .catch((e) => console.log("erreur " + e));
     },
+
+    //-----------------------------------------
+    //------ Fin zone d'autentification------
+    //-----------------------------------------
+
+    // Déconnection
+
     logout: function () {
       fetch(`${this.state.apiUrl}authentication/session?${this.state.apiKey}`, {
         method: 'DELETE',
@@ -183,7 +201,9 @@ export default new Vuex.Store({
         })
         .catch((e) => console.log("erreur " + e));
     },
-    addToFavorite: function (context, id) {
+
+    // Ajout / suppression d'un film aux favoris
+    Favorites: function (context, data) {
       fetch(`${this.state.apiUrl}account/${this.state.accountId}/favorite?${this.state.apiKey}&session_id=${this.state.sessionId}`, {
         method: 'POST',
         headers: {
@@ -192,20 +212,25 @@ export default new Vuex.Store({
         },
         body: JSON.stringify({
           "media_type": "movie",
-          "media_id": id,
-          "favorite": true,
+          "media_id": data.id,
+          "favorite": data.status,
         })
       })
         .then((response) => response.json())
         .then((json) => {
-          if (json.success) {
+          if (json.success && data.status) {
             console.log('Film ajouté aux favoris')
+            this.dispatch("updateFavorites")
+          } else if (json.success && !data.status) {
+            console.log('Film retiré des favoris')
             this.dispatch("updateFavorites")
           }
         })
         .catch((e) => console.log("erreur " + e));
     },
-    addToWatchList: function (context, id) {
+
+    // Ajout / suppression d'un film à la liste "à voir"
+    WatchList: function (context, data) {
       fetch(`${this.state.apiUrl}account/${this.state.accountId}/watchlist?${this.state.apiKey}&session_id=${this.state.sessionId}`, {
         method: 'POST',
         headers: {
@@ -214,22 +239,29 @@ export default new Vuex.Store({
         },
         body: JSON.stringify({
           "media_type": "movie",
-          "media_id": id,
-          "watchlist": true,
+          "media_id": data.id,
+          "watchlist": data.status,
         })
       })
         .then((response) => response.json())
         .then((json) => {
-          if (json.success) {
+          if (json.success && data.status) {
             console.log('film ajouté à la WatchList')
+            this.dispatch("updateWatchList")
+          } else if (json.success && !data.status) {
+            console.log('film retiré de la WatchList')
             this.dispatch("updateWatchList")
           }
         })
         .catch((e) => console.log("erreur " + e));
     },
+
+    // récuperation des favoris (si ce n'est pas deja fait)
     checkFavorites: function () {
       if (this.state.myFavorites.length == 0) this.dispatch("updateFavorites");
     },
+
+    // mise à jour des favoris
     updateFavorites: function () {
       fetch(`${this.state.apiUrl}account/${this.state.accountId}/favorite/movies?${this.state.apiKey}&session_id=${this.state.sessionId}&${this.state.language}&sort_by=created_at.asc&page=1
       `)
@@ -239,9 +271,13 @@ export default new Vuex.Store({
         })
         .catch((e) => console.log("erreur " + e));
     },
+
+    // récuperation des film à voir (si ce n'est pas deja fait)
     checkWatchList: function () {
       if (this.state.myWatchList.length == 0) this.dispatch("updateWatchList");
     },
+
+    // mise à jour des films à voir
     updateWatchList: function () {
       fetch(`${this.state.apiUrl}account/${this.state.accountId}/watchlist/movies?${this.state.apiKey}&session_id=${this.state.sessionId}&${this.state.language}&sort_by=created_at.asc&page=1
     `)
@@ -252,10 +288,9 @@ export default new Vuex.Store({
         .catch((e) => console.log("erreur " + e));
     },
   },
-
-
-
-
   modules: {
+  },
+  filters: {
+
   }
 })
