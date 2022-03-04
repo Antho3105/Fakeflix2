@@ -17,6 +17,9 @@ export default {
     MainArea,
     SideColumn,
   },
+  created: function () {
+    this.$store.dispatch("checkWatchList");
+  },
 };
 </script>
 

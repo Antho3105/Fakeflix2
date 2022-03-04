@@ -27,6 +27,8 @@ export default new Vuex.Store({
     myWatchlist: [],
     userId: "",
     userPwd: "",
+    userName: "",
+    isLogged: false,
   },
   getters: {
 
@@ -61,6 +63,29 @@ export default new Vuex.Store({
     updateSessionId(state, value) {
       state.sessionId = value
     },
+    updateAccountId(state, value) {
+      state.accountId = value.id
+      state.userName = value.userName
+      state.isLogged = true
+    },
+    clearSession(state, value) {
+      if (value) {
+        state.sessionId = ""
+        state.token = ""
+        state.accountId = 0
+        state.userId = ""
+        state.userPwd = ""
+        state.userName = ""
+        state.isLogged = false
+      }
+    },
+    updateMyFavorites(state, value) {
+      this.state.myFavorites = value
+    },
+    updateMyWatchList(state, value) {
+      this.state.myWatchList = value
+    },
+
   },
   actions: {
     search: async function () {
@@ -81,13 +106,11 @@ export default new Vuex.Store({
       fetch(`${this.state.apiUrl}authentication/token/new?${this.state.apiKey}`)
         .then((response) => response.json())
         .then((json) => {
-          console.log(json.request_token);
           this.commit("updateTokenId", json.request_token);
           this.dispatch("getTokenValidate", { id: this.state.userId, pwd: this.state.userPwd });
         });
     },
     getTokenValidate: function (context, user) {
-      console.log(user)
       fetch(`${this.state.apiUrl}authentication/token/validate_with_login?${this.state.apiKey}`, {
         method: 'POST',
         headers: {
@@ -102,7 +125,6 @@ export default new Vuex.Store({
       })
         .then((response) => response.json())
         .then((json) => {
-          console.log(json)
           this.commit("updateTokenId", json.request_token)
           this.dispatch("getSession", this.state.token);
         });
@@ -120,11 +142,99 @@ export default new Vuex.Store({
       })
         .then((response) => response.json())
         .then((json) => {
-          console.log(json)
           this.commit("updateSessionId", json.session_id)
+          this.dispatch("getAccountID", this.state.sessionId);
         });
-    }
+    },
+    getAccountID: function (context, sessionId) {
+      fetch(`${this.state.apiUrl}account?${this.state.apiKey}&session_id=${sessionId}`)
+        .then((response) => response.json())
+        .then((json) => {
+          this.commit("updateAccountId", { id: json.id, userName: json.name })
+        });
+    },
+    logout: function () {
+      fetch(`${this.state.apiUrl}authentication/session?${this.state.apiKey}`, {
+        method: 'DELETE',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          "session_id": this.state.sessionId
+        })
+      })
+        .then((response) => response.json())
+        .then((json) => {
+          if (json.success) this.commit("clearSession", true);
+        });
+    },
+    addToFavorite: function (context, id) {
+      fetch(`${this.state.apiUrl}account/${this.state.accountId}/favorite?${this.state.apiKey}&session_id=${this.state.sessionId}`, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          "media_type": "movie",
+          "media_id": id,
+          "favorite": true,
+        })
+      })
+        .then((response) => response.json())
+        .then((json) => {
+          if (json.success) {
+            console.log('Film ajouté aux favoris')
+            this.dispatch("updateFavorites")
+          }
+        });
+    },
+    addToWatchList: function (context, id) {
+      fetch(`${this.state.apiUrl}account/${this.state.accountId}/watchlist?${this.state.apiKey}&session_id=${this.state.sessionId}`, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          "media_type": "movie",
+          "media_id": id,
+          "watchlist": true,
+        })
+      })
+        .then((response) => response.json())
+        .then((json) => {
+          if (json.success) {
+            console.log('film ajouté à la WatchList')
+            this.dispatch("updateWatchList")
+          }
+        });
+    },
+    updateFavorites: function () {
+      fetch(`${this.state.apiUrl}account/${this.state.accountId}/favorite/movies?${this.state.apiKey}&session_id=${this.state.sessionId}&${this.state.language}&sort_by=created_at.asc&page=1
+      `)
+        .then((response) => response.json())
+        .then((json) => {
+          this.commit("updateMyFavorites", json.results)
+        });
+    },
+    checkWatchList: function () {
+      if (this.state.myFavorites.length == 0) this.dispatch("updateFavorites");
+    },
+    updateWatchList: function () {
+      fetch(`${this.state.apiUrl}account/${this.state.accountId}/watchlist/movies?${this.state.apiKey}&session_id=${this.state.sessionId}&${this.state.language}&sort_by=created_at.asc&page=1
+    `)
+        .then((response) => response.json())
+        .then((json) => {
+          this.commit("updateMyWatchList", json.results)
+        });
+    },
   },
+
+
+
+
   modules: {
   }
 })

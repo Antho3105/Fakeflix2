@@ -8,20 +8,21 @@
     </noscript>
     <header id="header">
       <h1><router-link to="/">FAKEFLIX</router-link></h1>
-      <div id="nav">
+      <div v-if="isLogged" id="nav">
         <div class="flex conteneur">
           <nav class="flex">
             <router-link to="/">Accueil</router-link> |
             <router-link to="/recherche">Recherche</router-link> |
             <router-link to="/mes-favoris">Favoris</router-link> |
             <router-link to="/films-a-voir">Films à voir</router-link> |
-            <router-link to="/login">Login</router-link>
+            <span id="logout" @click="logout()"> Logout</span>
           </nav>
           <QuickSearch />
         </div>
       </div>
     </header>
-    <router-view />
+    <LoginView v-if="!isLogged" />
+    <router-view v-if="isLogged" />
     <SiteFooter />
   </body>
 </template>
@@ -30,12 +31,23 @@
 
 
 <script>
+import { mapState } from "vuex";
 import SiteFooter from "@/components/Footer.vue";
 import QuickSearch from "@/components/QuickSearch.vue";
+import LoginView from "@/views/LoginView.vue";
+
 export default {
   components: {
     SiteFooter,
     QuickSearch,
+    LoginView,
+  },
+  computed: mapState(["isLogged"]),
+  created: function () {},
+  methods: {
+    logout: function () {
+      this.$store.dispatch("logout");
+    },
   },
 };
 </script>
@@ -81,7 +93,11 @@ header a {
   text-decoration: none;
   padding: 5px 10px;
 }
-
+#logout {
+  padding-left: 10px;
+  cursor: pointer;
+  color: white;
+}
 #nav a.router-link-exact-active {
   color: red;
   font-weight: bold;

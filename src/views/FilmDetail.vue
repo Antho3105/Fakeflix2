@@ -23,8 +23,10 @@
               <li>Nombre de vote : {{ movieData.vote_count }}</li>
             </ul>
             <div class="flex buttons">
-              <button>Ajouter à mes favoris</button>
-              <button>Ajouter aux films à voir</button>
+              <button @click="addToFavorites()">Ajouter à mes favoris</button>
+              <button @click="addToWatchList()">
+                Ajouter aux films à voir
+              </button>
             </div>
           </div>
         </div>
@@ -88,6 +90,7 @@ export default {
   created: function () {
     this.dataMovie();
     this.dataVideo();
+    this.$store.dispatch("checkWatchList");
   },
   methods: {
     dataMovie: async function () {
@@ -125,6 +128,12 @@ export default {
           this.adultConsent = false;
         }
       } else this.adultConsent = true;
+    },
+    addToFavorites: function () {
+      this.$store.dispatch("addToFavorite", this.$route.params.id);
+    },
+    addToWatchList: function () {
+      this.$store.dispatch("addToWatchList", this.$route.params.id);
     },
   },
 };

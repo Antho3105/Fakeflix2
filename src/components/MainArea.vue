@@ -1,6 +1,8 @@
 <template>
   <section class="home">
-    <h3>Bienvenue sur le site FakeFlix</h3>
+    <h3>
+      Bienvenue <span v-if="userName">{{ userName }}</span>
+    </h3>
   </section>
 </template>
 
@@ -8,7 +10,13 @@
 import { mapState } from "vuex";
 export default {
   name: "MainArea",
-  computed: mapState(["searchResult", "searchValue", "searching", "loading"]),
+  computed: mapState([
+    "searchResult",
+    "searchValue",
+    "searching",
+    "loading",
+    "userName",
+  ]),
   methods: {
     url: function (link) {
       return `https://image.tmdb.org/t/p/w500/${link}`;

@@ -1,7 +1,7 @@
 <template>
   <main>
     <section class="conteneur">
-      <p>Composant de recherche détaillée à construire</p>
+      <p>Composant de recherche détaillée a construire</p>
       <FullSearch />
     </section>
     <section
@@ -65,6 +65,9 @@ export default {
   name: "MainArea",
   components: {
     FullSearch,
+  },
+  created: function () {
+    this.$store.dispatch("checkWatchList");
   },
   computed: mapState(["searchResult", "searchValue", "searching", "loading"]),
   methods: {

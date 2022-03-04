@@ -1,18 +1,21 @@
 <template>
   <main>
-    <section id="Login" class="conteneur">
-      <h1>Page de login</h1>
-      <input id="id" placeholder="Identifiant" type="text" />
-      <input id="pwd" placeholder="Mot de passe" type="password" />
-      <button @click="authenticate()">Valider</button>
+    <section v-if="!accountId" class="conteneur">
+      <h1>Veuillez vous identifier</h1>
+      <div id="login">
+        <input id="id" placeholder="Identifiant" type="text" />
+        <input id="pwd" placeholder="Mot de passe" type="password" />
+        <button @click="authenticate()">Valider</button>
+      </div>
     </section>
   </main>
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   name: "LoginView",
-  components: {},
+  computed: mapState(["accountId"]),
   methods: {
     authenticate: function () {
       this.$store.commit("updateUser", {
@@ -24,3 +27,23 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+h1 {
+  text-align: center;
+}
+#login {
+  text-align: center;
+  max-width: 350px;
+  margin: 0 auto;
+}
+input,
+button {
+  margin: 5px 5px;
+  height: 40px;
+}
+
+input {
+  width: 100%;
+}
+</style>
