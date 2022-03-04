@@ -2,7 +2,7 @@
   <footer>
     <div class="footerMenu conteneur">
       <p>
-        Fakefix - Anthony AIRAUD @2022 - powered by
+        Fakefix - Anthony AIRAUD &copy; 2022 - powered by
         <a href="https://www.themoviedb.org/" target="_blank"
           >themoviesdb.org</a
         >
@@ -30,6 +30,10 @@ footer {
   bottom: 0;
   background-color: #343a40;
   width: 100%;
+}
+a {
+  text-decoration: none;
+  color: red;
 }
 </style>
 

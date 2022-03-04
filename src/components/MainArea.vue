@@ -1,7 +1,7 @@
 <template>
   <section class="home">
     <h3>
-      Bienvenue <span v-if="userName">{{ userName }}</span>
+      Bienvenue <span v-if="userName">{{ userName }} !</span>
     </h3>
   </section>
 </template>
