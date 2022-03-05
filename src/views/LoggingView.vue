@@ -2,10 +2,29 @@
   <main>
     <section v-if="!isLogged" class="conteneur">
       <h1>Veuillez vous identifier</h1>
+      <p>
+        Pour utiliser ce site vous devez vous inscrire :
+        <a
+          href="https://www.themoviedb.org/signup"
+          title="www.themoviedb.org/signup"
+          target="_blank"
+          >ICI</a
+        >
+      </p>
       <div id="login">
-        <input id="id" placeholder="Identifiant" type="text" />
-        <input id="pwd" placeholder="Mot de passe" type="password" />
-        <button @click="authenticate()">Valider</button>
+        <input
+          @keypress.enter="authenticate()"
+          id="id"
+          placeholder="Identifiant"
+          type="text"
+        />
+        <input
+          @keypress.enter="authenticate()"
+          id="pwd"
+          placeholder="Mot de passe"
+          type="password"
+        />
+        <button @click="authenticate()">S'identifier</button>
         <p>{{ loggingError }}</p>
       </div>
     </section>
@@ -30,7 +49,8 @@ export default {
 </script>
 
 <style scoped>
-h1 {
+h1,
+p {
   text-align: center;
 }
 #login {
@@ -43,8 +63,22 @@ button {
   margin: 5px 5px;
   height: 40px;
 }
-
+a {
+  color: red;
+  text-decoration: none;
+}
 input {
   width: 100%;
+  border-radius: 10px;
+  padding: 5px 10px;
+  text-align: center;
+}
+button {
+  width: 150px;
+  border-radius: 10px;
+  background-color: #e50914;
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
 }
 </style>

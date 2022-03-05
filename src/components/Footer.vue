@@ -3,7 +3,10 @@
     <div class="footerMenu conteneur">
       <p>
         Fakefix - Anthony AIRAUD &copy; 2022 - powered by
-        <a href="https://www.themoviedb.org/" target="_blank"
+        <a
+          href="https://www.themoviedb.org/"
+          title="www.themoviedb.org"
+          target="_blank"
           >themoviesdb.org</a
         >
       </p>
@@ -26,8 +29,8 @@ export default {
   justify-content: center;
 }
 footer {
-  position: fixed;
-  bottom: 0;
+  /* position: fixed;
+  bottom: 0; */
   background-color: #343a40;
   width: 100%;
 }

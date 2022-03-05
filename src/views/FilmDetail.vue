@@ -15,7 +15,7 @@
             <p>Durée : {{ length }}</p>
             <h3>Résumé</h3>
             <p>{{ movieData.overview }}</p>
-            <h3>Information :</h3>
+            <h3>Informations :</h3>
             <ul>
               <li>Budget : {{ budget }} $</li>
               <li>Popularité : {{ movieData.popularity }}</li>
@@ -121,7 +121,7 @@ export default {
     dataMovie: async function () {
       if (this.$route.path != "/film") {
         await fetch(
-          `${this.$store.state.apiUrl}movie/${this.$route.params.id}?${this.$store.state.apiKey}&${this.$store.state.language}`
+          `${this.$store.state.apiUrl}movie/${this.$route.params.id}?${this.$store.state.apiKey}&language=${this.$store.state.language}`
         )
           .then((response) => response.json())
           .then((json) => (this.movieData = json));
@@ -132,7 +132,7 @@ export default {
     dataVideo: function () {
       if (this.$route.path != "/film") {
         fetch(
-          `${this.$store.state.apiUrl}movie/${this.$route.params.id}/videos?${this.$store.state.apiKey}&${this.$store.state.language}`
+          `${this.$store.state.apiUrl}movie/${this.$route.params.id}/videos?${this.$store.state.apiKey}&language=${this.$store.state.language}`
         )
           .then((response) => response.json())
           .then((json) => (this.movieVideoKey = json.results[0].key))
@@ -198,6 +198,15 @@ section {
 .buttons {
   padding-top: 20px;
   justify-content: space-around;
+}
+button {
+  width: 180px;
+  padding: 5px 10px;
+  border-radius: 10px;
+  background-color: red;
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
 }
 iframe {
   display: block;

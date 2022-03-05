@@ -12,8 +12,8 @@ export default new Vuex.Store({
 
     apiUrl: "https://api.themoviedb.org/3/",
     apiKey: "api_key=37b69fbb862d94bb3f20580f85d6dca7",
-    language: "language=fr-FR",
-    adult: "include_adult=false",
+    language: "fr-FR",
+    adult: false,
     searching: false,
     searchType: "",
     searchValue: "",
@@ -40,7 +40,7 @@ export default new Vuex.Store({
     },
   },
   mutations: {
-    //refactoriser en envoyant un objet
+    //refactoriser en envoyant un objet --->
     updateSearching(state, value) {
       state.searching = value
     },
@@ -56,6 +56,7 @@ export default new Vuex.Store({
     updateLoading(state, value) {
       state.loading = value
     },
+    // <-----jusque ici
     updateCarouselData(state, value) {
       state.carouselData = value
     },
@@ -84,6 +85,14 @@ export default new Vuex.Store({
         state.userPwd = ""
         state.userName = ""
         state.isLogged = false
+        state.loggingError = "Déconnecté"
+        state.searching = false,
+          state.searchType = "",
+          state.searchValue = "",
+          state.searchResult = [],
+          state.carouselData = [],
+          state.myFavorites = [],
+          state.myWatchList = []
       }
     },
     updateMyFavorites(state, value) {
@@ -93,7 +102,10 @@ export default new Vuex.Store({
       this.state.myWatchList = value
     },
     updateLoggingError(state, value) {
-      this.state.loggingError = value
+      if (value == 26) this.state.loggingError = "Merci de fournir un identifiant et un mot de passe"
+      else if (value == 30) this.state.loggingError = "Identifiant et/ou mot de passe invalide"
+      else if (value == 0) this.state.loggingError = "Connecté"
+      else this.state.loggingError = "Connection refusée"
     }
 
   },
@@ -102,7 +114,7 @@ export default new Vuex.Store({
     search: async function () {
       if (this.state.searchValue) {
         this.commit("updateLoading", true)
-        await fetch(`${this.state.apiUrl}search/${this.state.searchType}?${this.state.apiKey}&${this.state.language}&query=${this.state.searchValue}&page=1&${this.state.adult}`)
+        await fetch(`${this.state.apiUrl}search/${this.state.searchType}?${this.state.apiKey}&language=${this.state.language}&query=${this.state.searchValue}&page=1&include_adult=${this.state.adult}`)
           .then((response) => response.json())
           .then((json) => this.commit("updateSearchResult", json.results));
         this.commit("updateLoading", false);
@@ -110,7 +122,7 @@ export default new Vuex.Store({
     },
     // recuperation fe films pour le carrousel
     getCarouselData: function () {
-      fetch(`${this.state.apiUrl}discover/movie?${this.state.apiKey}&${this.state.language}&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_watch_monetization_types=flatrate`)
+      fetch(`${this.state.apiUrl}discover/movie?${this.state.apiKey}&language=${this.state.language}&sort_by=popularity.desc&include_adult=${this.state.adult}&include_video=false&page=1&with_watch_monetization_types=flatrate`)
         .then((response) => response.json())
         .then((json) => this.commit("updateCarouselData", json.results));
     },
@@ -146,8 +158,8 @@ export default new Vuex.Store({
           if (json.success) {
             this.commit("updateTokenId", json.request_token);
             this.dispatch("getSession", this.state.token);
-            this.commit("updateLoggingError", json.status_message);
-          } else this.commit("updateLoggingError", json.status_message)
+            this.commit("updateLoggingError", 0);
+          } else this.commit("updateLoggingError", json.status_code)
         })
         .catch((e) => console.log("erreur " + e));
     },
@@ -263,7 +275,7 @@ export default new Vuex.Store({
 
     // mise à jour des favoris
     updateFavorites: function () {
-      fetch(`${this.state.apiUrl}account/${this.state.accountId}/favorite/movies?${this.state.apiKey}&session_id=${this.state.sessionId}&${this.state.language}&sort_by=created_at.asc&page=1
+      fetch(`${this.state.apiUrl}account/${this.state.accountId}/favorite/movies?${this.state.apiKey}&session_id=${this.state.sessionId}&language=${this.state.language}&sort_by=created_at.asc&page=1
       `)
         .then((response) => response.json())
         .then((json) => {
@@ -279,7 +291,7 @@ export default new Vuex.Store({
 
     // mise à jour des films à voir
     updateWatchList: function () {
-      fetch(`${this.state.apiUrl}account/${this.state.accountId}/watchlist/movies?${this.state.apiKey}&session_id=${this.state.sessionId}&${this.state.language}&sort_by=created_at.asc&page=1
+      fetch(`${this.state.apiUrl}account/${this.state.accountId}/watchlist/movies?${this.state.apiKey}&session_id=${this.state.sessionId}&language=${this.state.language}&sort_by=created_at.asc&page=1
     `)
         .then((response) => response.json())
         .then((json) => {
