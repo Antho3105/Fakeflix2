@@ -55,7 +55,10 @@ figure {
   margin: 15px 5px;
   text-align: center;
 }
-
+h1 {
+  margin: 0;
+  padding-top: 15px;
+}
 figure a {
   text-decoration: none;
 }

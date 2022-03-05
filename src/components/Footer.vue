@@ -1,6 +1,6 @@
 <template>
   <footer>
-    <div class="footerMenu conteneur">
+    <div class="footer conteneur">
       <p>
         Fakefix - Anthony AIRAUD &copy; 2022 - powered by
         <a
@@ -21,11 +21,12 @@ export default {
 </script>
 
 <style scoped>
-.footerMenu {
+.footer {
   color: white;
   display: flex;
   align-items: center;
   justify-content: center;
+  height: 50px;
 }
 footer {
   background-color: #343a40;

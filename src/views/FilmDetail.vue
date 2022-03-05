@@ -189,11 +189,12 @@ img {
   width: 30%;
   object-fit: contain;
 }
+
 .movieData {
   width: 65%;
 }
 section {
-  margin-bottom: 70px;
+  margin-bottom: 10px;
 }
 .buttons {
   padding-top: 20px;

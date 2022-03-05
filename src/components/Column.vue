@@ -24,4 +24,9 @@ export default {
 * {
   color: white;
 }
+h3 {
+  margin: 0;
+  padding-top: 15px;
+  padding-bottom: 20px;
+}
 </style>

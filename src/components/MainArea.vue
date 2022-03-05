@@ -1,8 +1,8 @@
 <template>
   <section class="home">
-    <h3>
+    <h2>
       Bienvenue <span v-if="userName">{{ userName }} !</span>
-    </h3>
+    </h2>
   </section>
 </template>
 
@@ -29,11 +29,16 @@ export default {
 .home {
   width: 70%;
   text-align: left;
-  background-repeat: no-repeat;
-  background-size: contain;
-  font-size: 30px;
 }
 * {
   color: white;
+}
+h2 {
+  font-size: 30px;
+  margin: 0;
+  padding-top: 15px;
+}
+button {
+  color: black;
 }
 </style>

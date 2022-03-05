@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import router from '@/router'
+//import router from '@/router'
 
 Vue.use(Vuex)
 
@@ -23,6 +23,7 @@ export default new Vuex.Store({
     loading: false,
     carouselData: [],
     sessionId: "",
+    sessionExpiration: "",
     token: "",
     accountId: 0,
     myFavorites: [],
@@ -64,6 +65,9 @@ export default new Vuex.Store({
     updateTokenId(state, value) {
       state.token = value
     },
+    updateSessionExpiration(state, value) {
+      state.sessionExpiration = value
+    },
     updateUser(state, value) {
       state.userId = value.id
       state.userPwd = value.pwd
@@ -94,7 +98,7 @@ export default new Vuex.Store({
           state.carouselData = [],
           state.myFavorites = [],
           state.myWatchList = [],
-          router.push("/")
+          state.sessionExpiration = ""
       }
     },
     updateMyFavorites(state, value) {
@@ -108,6 +112,14 @@ export default new Vuex.Store({
       else if (value == 30) this.state.loggingError = "Identifiant et/ou mot de passe invalide"
       else if (value == 0) this.state.loggingError = "Connecté"
       else this.state.loggingError = "Connection refusée"
+    },
+    updateDataLs(state, value) {
+      this.state.accountId = value.accountId,
+        this.state.sessionExpiration = value.sessionExpiration,
+        this.state.sessionId = value.sessionId,
+        this.state.userName = value.userName,
+        this.state.isLogged = true,
+        this.state.loggingError = "Connecté"
     }
 
   },
@@ -137,6 +149,7 @@ export default new Vuex.Store({
         .then((response) => response.json())
         .then((json) => {
           this.commit("updateTokenId", json.request_token);
+          this.commit("updateSessionExpiration", json.expires_at);
           this.dispatch("getTokenValidate", { id: this.state.userId, pwd: this.state.userPwd });
         })
         .catch((error) => console.log("erreur " + error));
@@ -187,7 +200,8 @@ export default new Vuex.Store({
       fetch(`${this.state.apiUrl}account?${this.state.apiKey}&session_id=${sessionId}`)
         .then((response) => response.json())
         .then((json) => {
-          this.commit("updateAccountId", { id: json.id, userName: json.name })
+          this.commit("updateAccountId", { id: json.id, userName: json.name });
+          this.dispatch("toLocalStorage")
         })
         .catch((e) => console.log("erreur " + e));
     },
@@ -300,6 +314,22 @@ export default new Vuex.Store({
           this.commit("updateMyWatchList", json.results)
         })
         .catch((e) => console.log("erreur " + e));
+    },
+    //-----------------------------------------------------------
+    //              test sauvegarde local storage
+    //-----------------------------------------------------------
+    toLocalStorage: function () {
+      localStorage.setItem('fakeflix', JSON.stringify({
+        sessionExpiration: this.state.sessionExpiration,
+        userName: this.state.userName,
+        accountId: this.state.accountId,
+        sessionId: this.state.sessionId,
+      }))
+    },
+    clearLocalStorage: function () {
+      localStorage.removeItem('fakeflix');
+      //location.reload();
+      return false;
     },
   },
   modules: {

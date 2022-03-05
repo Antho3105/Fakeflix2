@@ -85,7 +85,6 @@ export default {
   text-align: left;
   background-repeat: no-repeat;
   background-size: contain;
-  margin-bottom: 60px;
 }
 figure {
   width: 150px;

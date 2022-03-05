@@ -43,10 +43,18 @@ export default {
     LoggingView,
   },
   computed: mapState(["isLogged"]),
-  created: function () {},
+  created: function () {
+    if (localStorage.getItem("fakeflix") != null) {
+      this.$store.commit(
+        "updateDataLs",
+        JSON.parse(localStorage.getItem("fakeflix"))
+      );
+    }
+  },
   methods: {
     logout: function () {
       this.$store.dispatch("logout");
+      this.$store.dispatch("clearLocalStorage");
     },
   },
 };
@@ -58,6 +66,9 @@ export default {
 @import "./Style/normalize.css";
 @import "./Style/style.css";
 @import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;1,400;1,700&display=swap");
+* {
+  margin: 0;
+}
 
 main {
   color: white;

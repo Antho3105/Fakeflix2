@@ -5,19 +5,46 @@
       type="text"
       v-model="searchValue"
       @keypress.enter="search()"
-      @input="search()"
     />
+    <select v-model="searchType" name="Type" id="type">
+      <option value="movie" selected>Film</option>
+      <option value="tv">Série TV</option>
+      <option value="person">Artistes</option>
+    </select>
+    <br />
+    <label for="adult">Contenu adulte</label>
+    <input v-model="adult" name="adult" v-bind:value="true" type="radio" /> Oui
+    <input
+      v-model="adult"
+      name="adult"
+      v-bind:value="false"
+      type="radio"
+      checked
+    />
+    Non
+    <br />
+    <label for="language">Langue</label>
+    <select v-model="language" name="language" id="language">
+      <option value="fr-FR">Francais</option>
+      <option value="en-EN">Anglais</option>
+      <option value="es-ES">Espagnol</option>
+    </select>
+    <br />
+    <button id="search">Recherche</button>
   </div>
 </template>
 
 <script>
 import { debounce } from "debounce";
+import router from "@/router";
 export default {
   name: "FullSearch",
   data() {
     return {
       searchValue: "",
       searchType: "movie",
+      adult: false,
+      language: "fr-FR",
     };
   },
   computed: {},
@@ -25,7 +52,7 @@ export default {
   methods: {
     search: debounce(function () {
       if (this.$route.path != "/recherche") {
-        this.$router.push({ name: "search" });
+        router.push("/");
       }
       if (this.searchValue != "") {
         this.$store.commit("updateSearching", true);
