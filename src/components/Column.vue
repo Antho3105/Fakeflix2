@@ -1,7 +1,8 @@
 <template>
-  <section id="column">
+  <aside id="column">
+    <h3>Films populaires :</h3>
     <CarouselVue />
-  </section>
+  </aside>
 </template>
 
 <script>

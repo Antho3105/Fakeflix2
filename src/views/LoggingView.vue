@@ -49,6 +49,10 @@ export default {
 </script>
 
 <style scoped>
+main {
+  color: white;
+  min-height: calc(100vh - 295px);
+}
 h1,
 p {
   text-align: center;

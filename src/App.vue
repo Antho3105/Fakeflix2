@@ -61,6 +61,7 @@ export default {
 
 main {
   color: white;
+  min-height: calc(100vh - 275px);
 }
 
 #header {
@@ -104,5 +105,9 @@ header a {
 }
 #nav a {
   transition: all 0.2s ease-in-out;
+}
+
+h3 {
+  margin: 15px 0;
 }
 </style>

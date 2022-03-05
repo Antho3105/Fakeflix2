@@ -1,19 +1,16 @@
 <template>
-  <section>
-    <h3>Films populaires :</h3>
-    <hooper :settings="hooperSettings" id="carousel">
-      <slide v-for="movie of carouselData" v-bind:key="movie.id">
-        <router-link :to="/film/ + movie.id">
-          <img v-if="movie.poster_path" :src="url(movie.poster_path)" alt="" />
-          <img
-            v-else
-            :src="require('@/Images/image-non-disponible.png')"
-            alt=""
-          />
-        </router-link>
-      </slide>
-    </hooper>
-  </section>
+  <hooper :settings="hooperSettings" id="carousel">
+    <slide v-for="movie of carouselData" v-bind:key="movie.id">
+      <router-link :to="/film/ + movie.id">
+        <img v-if="movie.poster_path" :src="url(movie.poster_path)" alt="" />
+        <img
+          v-else
+          :src="require('@/Images/image-non-disponible.png')"
+          alt=""
+        />
+      </router-link>
+    </slide>
+  </hooper>
 </template>
 
 <script>
@@ -56,5 +53,9 @@ h6 {
 }
 .hooper {
   height: auto;
+}
+img {
+  height: 30vh;
+  object-fit: contain;
 }
 </style>

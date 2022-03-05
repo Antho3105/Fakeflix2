@@ -1,9 +1,11 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import router from '@/router'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
+
   state: {
     server: process.env.VUE_APP_SERVER,
     version: process.env.VUE_APP_VERSION,
@@ -29,7 +31,6 @@ export default new Vuex.Store({
     userPwd: "",
     userName: "",
     isLogged: false,
-    loggingError: "",
   },
   getters: {
     favoritesFilmsId(state) {
@@ -92,7 +93,8 @@ export default new Vuex.Store({
           state.searchResult = [],
           state.carouselData = [],
           state.myFavorites = [],
-          state.myWatchList = []
+          state.myWatchList = [],
+          router.push("/")
       }
     },
     updateMyFavorites(state, value) {

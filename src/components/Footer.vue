@@ -23,14 +23,11 @@ export default {
 <style scoped>
 .footerMenu {
   color: white;
-  height: 60px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 footer {
-  /* position: fixed;
-  bottom: 0; */
   background-color: #343a40;
   width: 100%;
 }
