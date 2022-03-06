@@ -56,7 +56,6 @@
     <section v-else-if="adultConsent === false" class="conteneur">
       <h2>Contenu bloqué</h2>
     </section>
-    <section v-else class="conteneur"><p>toto</p></section>
   </main>
 </template>
 
@@ -228,5 +227,33 @@ iframe {
 .appear-enter,
 .appear-leave-to {
   transform: scale(0);
+}
+
+@media screen and (max-width: 800px) {
+  img {
+    width: 40%;
+  }
+  .movieData {
+    width: 55%;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  #details {
+    margin: 0 auto;
+    text-align: center;
+  }
+  img {
+    width: 50%;
+    margin: 0 auto;
+    padding-bottom: 15px;
+  }
+  .movieData {
+    width: 95%;
+    margin: 0 auto;
+  }
+  li {
+    text-align: left;
+  }
 }
 </style>

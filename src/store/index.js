@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-//import router from '@/router'
+import router from '@/router/index.js'
 
 Vue.use(Vuex)
 
@@ -81,7 +81,6 @@ export default new Vuex.Store({
       state.userName = value.userName
       if (this.state.accountId != 0) state.isLogged = true
       else state.isLogged = false
-      this.dispatch("routeToHome")
     },
     clearSession(state, value) {
       if (value) {
@@ -122,7 +121,6 @@ export default new Vuex.Store({
         this.state.userName = value.userName,
         this.state.isLogged = true,
         this.state.loggingError = "Connecté"
-      this.dispatch("routeToHome")
     }
 
   },
@@ -137,6 +135,7 @@ export default new Vuex.Store({
         this.commit("updateLoading", false);
       } else this.commit("updateSearchResult", "")
     },
+
     // recuperation fe films pour le carrousel
     getCarouselData: function () {
       fetch(`${this.state.apiUrl}discover/movie?${this.state.apiKey}&language=${this.state.language}&sort_by=popularity.desc&include_adult=${this.state.adult}&include_video=false&page=1&with_watch_monetization_types=flatrate`)
@@ -329,18 +328,11 @@ export default new Vuex.Store({
         sessionId: this.state.sessionId,
       }))
     },
-    clearLocalStorage: function () {
+    clearLocalStorage: function (context, route) {
       localStorage.removeItem('fakeflix');
-      //location.reload();
+      if (route != "/") router.push({ name: "home" })
       return false;
     },
-    routeToHome: function () {
-      if (this.route != "/") {
-        console.log('ok')
-        //this.route.push("/")
-      }
-    }
-
   },
   modules: {
   },

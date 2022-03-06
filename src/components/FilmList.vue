@@ -36,7 +36,7 @@ export default {
 <style scoped>
 figure {
   width: 150px;
-  margin: 15px 5px;
+  margin: 15px 10px;
   text-align: center;
 }
 figure a {
@@ -58,5 +58,17 @@ figcaption {
   width: 0px;
   height: 0px;
   transform: scale(0);
+}
+
+@media screen and (max-width: 700px) {
+  figure {
+    width: 250px;
+  }
+}
+
+@media screen and (max-width: 585px) {
+  figure {
+    margin: 10px auto;
+  }
 }
 </style>

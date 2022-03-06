@@ -55,7 +55,13 @@ h6 {
   height: auto;
 }
 img {
-  height: 30vh;
+  height: 45vh;
   object-fit: contain;
+}
+
+@media screen and (max-width: 800px) {
+  img {
+    height: 50vh;
+  }
 }
 </style>

@@ -54,7 +54,7 @@ export default {
   methods: {
     logout: function () {
       this.$store.dispatch("logout");
-      this.$store.dispatch("clearLocalStorage");
+      this.$store.dispatch("clearLocalStorage", this.$route.path);
     },
   },
 };

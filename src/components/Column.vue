@@ -1,6 +1,6 @@
 <template>
   <aside id="column">
-    <h3>Films populaires :</h3>
+    <h3>Films populaires</h3>
     <CarouselVue />
   </aside>
 </template>
@@ -17,7 +17,7 @@ export default {
 
 <style scoped>
 #column {
-  width: 25%;
+  width: 35%;
   text-align: center;
   font-size: 30px;
 }
@@ -28,5 +28,10 @@ h3 {
   margin: 0;
   padding-top: 15px;
   padding-bottom: 20px;
+}
+@media screen and (max-width: 800px) {
+  #column {
+    width: 95%;
+  }
 }
 </style>

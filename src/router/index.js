@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import LoggingView from '../views/LoggingView.vue'
 
+
 Vue.use(VueRouter)
 
 const routes = [

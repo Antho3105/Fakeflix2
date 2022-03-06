@@ -27,7 +27,7 @@ export default {
 
 <style scoped>
 .home {
-  width: 70%;
+  width: 60%;
   text-align: left;
 }
 * {
@@ -40,5 +40,11 @@ h2 {
 }
 button {
   color: black;
+}
+
+@media screen and (max-width: 700px) {
+  .home {
+    width: 95%;
+  }
 }
 </style>

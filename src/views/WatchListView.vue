@@ -37,4 +37,9 @@ h1 {
   margin: 0;
   padding-top: 15px;
 }
+@media screen and (max-width: 700px) {
+  h1 {
+    text-align: center;
+  }
+}
 </style>
