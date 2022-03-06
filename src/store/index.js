@@ -32,6 +32,7 @@ export default new Vuex.Store({
     userPwd: "",
     userName: "",
     isLogged: false,
+    loggingError: "",
   },
   getters: {
     favoritesFilmsId(state) {
@@ -80,6 +81,7 @@ export default new Vuex.Store({
       state.userName = value.userName
       if (this.state.accountId != 0) state.isLogged = true
       else state.isLogged = false
+      this.dispatch("routeToHome")
     },
     clearSession(state, value) {
       if (value) {
@@ -120,6 +122,7 @@ export default new Vuex.Store({
         this.state.userName = value.userName,
         this.state.isLogged = true,
         this.state.loggingError = "Connecté"
+      this.dispatch("routeToHome")
     }
 
   },
@@ -331,6 +334,13 @@ export default new Vuex.Store({
       //location.reload();
       return false;
     },
+    routeToHome: function () {
+      if (this.route != "/") {
+        console.log('ok')
+        //this.route.push("/")
+      }
+    }
+
   },
   modules: {
   },

@@ -35,6 +35,7 @@ export default {
       } else {
         this.$store.commit("updateSearching", false);
         this.$store.commit("updateSearchValue", this.searchValue);
+        this.$store.commit("updateSearchResult", []);
       }
     }, 500),
   },
