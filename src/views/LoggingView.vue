@@ -6,7 +6,7 @@
         Pour utiliser ce site vous devez vous inscrire :
         <a
           href="https://www.themoviedb.org/signup"
-          title="www.themoviedb.org/signup"
+          title="www.themoviedb.org"
           target="_blank"
           >ICI</a
         >
