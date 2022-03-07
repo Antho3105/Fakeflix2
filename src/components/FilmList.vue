@@ -130,8 +130,7 @@ figure:nth-child(19) {
 figure:nth-child(20) {
   animation-duration: 1.5s;
 }
-
-v figure:hover {
+figure:hover {
   transform: scale(1.1);
   transition: transform 0.2s ease-in-out;
 }
