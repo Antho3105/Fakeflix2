@@ -122,4 +122,13 @@ header a {
 h3 {
   margin: 15px 0;
 }
+
+@media screen and (max-width: 600px) {
+  #header {
+    min-height: 100px;
+  }
+  main {
+    min-height: calc(100vh - 195px) !important;
+  }
+}
 </style>

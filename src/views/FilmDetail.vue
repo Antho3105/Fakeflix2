@@ -8,7 +8,13 @@
     >
       <transition name="appear">
         <div class="flex" id="details">
-          <img :src="getUrl()" alt="" />
+          <a
+            :href="getUrl()"
+            :title="'Affiche ' + movieData.original_title"
+            target="_blank"
+            ><img :src="getUrl()" :alt="'Affiche ' + movieData.original_title"
+          /></a>
+
           <div class="movieData">
             <h2>{{ movieData.original_title }}</h2>
             <p>Date de sortie : {{ dateSortie }}</p>
@@ -185,8 +191,16 @@ export default {
   padding: 20px 0;
 }
 img {
-  width: 30%;
+  width: 100%;
   object-fit: contain;
+  transition: all 0.2s ease-in-out;
+}
+a {
+  width: 30%;
+}
+img:hover {
+  transform: scale(1.1) translateX(20px) translateY(20px);
+  transition: all 0.5s ease-in-out;
 }
 
 .movieData {
@@ -230,7 +244,7 @@ iframe {
 }
 
 @media screen and (max-width: 800px) {
-  img {
+  a {
     width: 40%;
   }
   .movieData {
@@ -243,10 +257,13 @@ iframe {
     margin: 0 auto;
     text-align: center;
   }
-  img {
+  a {
     width: 50%;
     margin: 0 auto;
     padding-bottom: 15px;
+  }
+  img:hover {
+    transform: scale(1.1) translateY(15px);
   }
   .movieData {
     width: 95%;
