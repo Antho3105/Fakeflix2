@@ -1,7 +1,7 @@
 <template>
   <main>
     <section id="watchList" class="conteneur">
-      <h1>Mes films à voir</h1>
+      <h2>Mes films à voir</h2>
       <ListView v-bind:filmList="myWatchList" />
     </section>
   </main>
@@ -33,12 +33,12 @@ export default {
 
 
 <style scoped>
-h1 {
+h2 {
   margin: 0;
   padding-top: 15px;
 }
 @media screen and (max-width: 700px) {
-  h1 {
+  h2 {
     text-align: center;
   }
 }

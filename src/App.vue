@@ -45,8 +45,8 @@ export default {
   computed: mapState(["isLogged"]),
   created: function () {
     if (localStorage.getItem("fakeflix") != null) {
-      this.$store.commit(
-        "updateDataLs",
+      this.$store.dispatch(
+        "checkConnection",
         JSON.parse(localStorage.getItem("fakeflix"))
       );
     }

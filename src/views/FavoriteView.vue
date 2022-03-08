@@ -1,7 +1,7 @@
 <template>
   <main>
     <section id="favorites" class="conteneur">
-      <h1>Mes films favoris</h1>
+      <h2>Mes films favoris</h2>
       <ListView v-bind:filmList="myFavorites" />
     </section>
   </main>
@@ -35,12 +35,12 @@ export default {
 
 
 <style scoped>
-h1 {
+h2 {
   margin: 0;
   padding-top: 15px;
 }
 @media screen and (max-width: 700px) {
-  h1 {
+  h2 {
     text-align: center;
   }
 }

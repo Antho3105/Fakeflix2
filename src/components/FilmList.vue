@@ -45,7 +45,7 @@ figure {
   margin: 15px 10px;
   text-align: center;
   transition: transform 0.2s ease-in-out;
-  animation: appear 0.5s ease-in-out;
+  animation: appear 0.2s ease-in-out;
 }
 
 @keyframes appear {
@@ -61,74 +61,74 @@ figure {
 }
 
 figure:nth-child(2) {
-  animation-duration: 0.55;
+  animation-duration: 0.25;
 }
 
 figure:nth-child(3) {
-  animation-duration: 0.6s;
+  animation-duration: 0.3s;
 }
 
 figure:nth-child(3) {
-  animation-duration: 0.65s;
+  animation-duration: 0.35s;
 }
 
 figure:nth-child(4) {
-  animation-duration: 0.7s;
+  animation-duration: 0.4s;
 }
 
 figure:nth-child(5) {
-  animation-duration: 0.75s;
+  animation-duration: 0.45s;
 }
 
 figure:nth-child(6) {
-  animation-duration: 0.8s;
+  animation-duration: 0.5s;
 }
 
 figure:nth-child(7) {
-  animation-duration: 0.85s;
+  animation-duration: 0.55s;
 }
 
 figure:nth-child(8) {
-  animation-duration: 0.8s;
+  animation-duration: 0.6s;
 }
 figure:nth-child(9) {
-  animation-duration: 0.85s;
+  animation-duration: 0.65s;
 }
 figure:nth-child(10) {
-  animation-duration: 0.9s;
+  animation-duration: 0.7s;
 }
 figure:nth-child(11) {
-  animation-duration: 1s;
+  animation-duration: 0.75s;
 }
 figure:nth-child(11) {
-  animation-duration: 1.05s;
+  animation-duration: 0.8s;
 }
 figure:nth-child(12) {
-  animation-duration: 1.1s;
+  animation-duration: 0.85s;
 }
 figure:nth-child(13) {
-  animation-duration: 1.15s;
+  animation-duration: 0.9s;
 }
 figure:nth-child(14) {
-  animation-duration: 1.2s;
+  animation-duration: 0.95s;
 }
 figure:nth-child(15) {
-  animation-duration: 1.25s;
+  animation-duration: 1s;
 }
 figure:nth-child(16) {
-  animation-duration: 1.3s;
+  animation-duration: 1.05s;
 }
 figure:nth-child(17) {
-  animation-duration: 1.35s;
+  animation-duration: 1.1s;
 }
 figure:nth-child(18) {
-  animation-duration: 1.4s;
+  animation-duration: 1.15s;
 }
 figure:nth-child(19) {
-  animation-duration: 1.45s;
+  animation-duration: 1.2s;
 }
 figure:nth-child(20) {
-  animation-duration: 1.5s;
+  animation-duration: 1.25s;
 }
 figure:hover {
   transform: scale(1.1);
@@ -155,15 +155,20 @@ figcaption {
   transform: scale(0);
 }
 
-@media screen and (max-width: 700px) {
+@media screen and (max-width: 650px) {
   figure {
-    width: 250px;
+    width: 200px;
   }
 }
 
 @media screen and (max-width: 585px) {
+  .conteneur {
+    justify-content: center;
+  }
+}
+@media screen and (max-width: 500px) {
   figure {
-    margin: 10px auto;
+    width: 180px;
   }
 }
 </style>

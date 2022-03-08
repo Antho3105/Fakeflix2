@@ -1,6 +1,6 @@
 <template>
   <section class="film">
-    <p>Datas du film</p>
+    <h2>Datas du film</h2>
   </section>
 </template>
 

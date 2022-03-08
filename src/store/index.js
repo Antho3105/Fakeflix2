@@ -34,6 +34,11 @@ export default new Vuex.Store({
     isLogged: false,
     loggingError: "",
   },
+
+
+  //--- getters-------------------------------------------------------
+
+
   getters: {
     favoritesFilmsId(state) {
       return (state.myFavorites.length > 0) ? state.myFavorites.map(movie => movie.id) : [];
@@ -42,6 +47,10 @@ export default new Vuex.Store({
       return (state.myWatchList.length > 0) ? state.myWatchList.map(movie => movie.id) : [];
     },
   },
+
+
+  //------mutation (commit) -----------------------------
+
   mutations: {
     //refactoriser en envoyant un objet --->
     updateSearching(state, value) {
@@ -112,17 +121,21 @@ export default new Vuex.Store({
       if (value == 26) this.state.loggingError = "Merci de fournir un identifiant et un mot de passe"
       else if (value == 30) this.state.loggingError = "Identifiant et/ou mot de passe invalide"
       else if (value == 0) this.state.loggingError = "Connecté"
+      else if (value == -1) this.state.loggingError = "Dernière connexion > 1h merci de vous reconnecter"
       else this.state.loggingError = "Connection refusée"
     },
+
     updateDataLs(state, value) {
+      this.state.sessionExpiration = value.sessionExpiration
       this.state.accountId = value.accountId,
-        this.state.sessionExpiration = value.sessionExpiration,
         this.state.sessionId = value.sessionId,
         this.state.userName = value.userName,
         this.state.isLogged = true,
         this.state.loggingError = "Connecté"
-    }
+    },
 
+
+    //------------- actions (dispatch) ---------------------------------------------
   },
   actions: {
     // recherche films
@@ -232,6 +245,18 @@ export default new Vuex.Store({
         .catch((e) => console.log("erreur " + e));
     },
 
+    //---------------- Vérification derniere connection < 1h -------------
+
+    checkConnection: function (context, obj) {
+      let now = Date.parse(new Date())
+      let sessionExp = Date.parse(new Date(Date.parse(obj.sessionExpiration)).toUTCString())
+      let diff = sessionExp - now
+      if (diff < 0) {
+        console.log("nouvelle connection !")
+        this.commit("updateLoggingError", -1)
+      } else this.commit("updateDataLs", obj)
+    },
+
     // Ajout / suppression d'un film aux favoris
     Favorites: function (context, data) {
       fetch(`${this.state.apiUrl}account/${this.state.accountId}/favorite?${this.state.apiKey}&session_id=${this.state.sessionId}`, {
@@ -318,7 +343,7 @@ export default new Vuex.Store({
         .catch((e) => console.log("erreur " + e));
     },
     //-----------------------------------------------------------
-    //              test sauvegarde local storage
+    //            Sauvegarde local storage
     //-----------------------------------------------------------
     toLocalStorage: function () {
       localStorage.setItem('fakeflix', JSON.stringify({
