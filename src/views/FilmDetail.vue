@@ -6,6 +6,18 @@
       "
       class="conteneur"
     >
+      <div v-if="movieVideoKey" id="trailer">
+        <iframe
+          :src="getVideoURL()"
+          title="YouTube video player"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+        ></iframe>
+      </div>
+      <div v-else id="trailer">
+        <p>Pas de bande annonce pour ce film</p>
+      </div>
       <transition name="appear">
         <div class="flex" id="details">
           <a
@@ -43,21 +55,12 @@
               </button>
             </div>
           </div>
+          <div id="casting">
+            <h2>Acteurs du film</h2>
+            <CarouselActors v-bind:actors="actors" />
+          </div>
         </div>
       </transition>
-
-      <div v-if="movieVideoKey" id="trailer">
-        <iframe
-          :src="getVideoURL()"
-          title="YouTube video player"
-          frameborder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen
-        ></iframe>
-      </div>
-      <div v-else id="trailer">
-        <p>Pas de bande annonce pour ce film</p>
-      </div>
     </section>
     <section v-else-if="adultConsent === false" class="conteneur">
       <h2>Contenu bloqué</h2>
@@ -68,15 +71,19 @@
 
 <script>
 import { mapGetters } from "vuex";
-
+import CarouselActors from "@/components/CarouselActors.vue";
 export default {
   name: "FilmDetail",
-  components: {},
+  components: {
+    CarouselActors,
+  },
   data: function () {
     return {
       movieData: {},
       movieVideoKey: "",
+      movieActors: [],
       adultConsent: null,
+      movieProductors: [],
     };
   },
   computed: {
@@ -114,15 +121,20 @@ export default {
         ? false
         : true;
     },
+    actors: function () {
+      return this.movieActors.slice(0, 10);
+    },
   },
   created: function () {
     this.dataMovie();
     this.dataVideo();
     this.$store.dispatch("checkWatchList");
     this.$store.dispatch("checkFavorites");
+    this.dataActors();
   },
 
   methods: {
+    // récuperation data du film
     dataMovie: async function () {
       if (this.$route.path != "/film") {
         await fetch(
@@ -134,6 +146,7 @@ export default {
       } else this.$router.push({ name: "search" });
     },
 
+    // récuperation de la video du film
     dataVideo: function () {
       if (this.$route.path != "/film") {
         fetch(
@@ -144,12 +157,29 @@ export default {
           .catch((e) => console.log("erreur " + e));
       }
     },
+    // récuperation du casting du film
+    dataActors: function () {
+      fetch(
+        `${this.$store.state.apiUrl}movie/${this.$route.params.id}/credits?${this.$store.state.apiKey}&language=${this.$store.state.language}`
+      )
+        .then((response) => response.json())
+        .then((json) => {
+          this.movieActors = json.cast;
+          this.movieProductors = json.crew;
+        });
+    },
+
+    // concatenation de l'adresse url de la photo
     getUrl: function () {
       return `https://image.tmdb.org/t/p/w500/${this.movieData.poster_path}`;
     },
+
+    // concatenation de l'adresse url de la video
     getVideoURL: function () {
       return `https://www.youtube.com/embed/` + this.movieVideoKey;
     },
+
+    //verif
     checkAdult: function () {
       if (this.movieData.adult === true) {
         if (confirm("contenu adulte") === true) {

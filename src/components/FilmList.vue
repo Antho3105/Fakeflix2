@@ -30,7 +30,7 @@ export default {
   computed: {},
   methods: {
     url: function (link) {
-      return `https://image.tmdb.org/t/p/w500/${link}`;
+      return `https://image.tmdb.org/t/p/w500${link}`;
     },
   },
   mounted() {},

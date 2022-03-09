@@ -1,14 +1,18 @@
 <template>
   <hooper :settings="hooperSettings" id="carousel">
-    <slide v-for="movie of carouselData" v-bind:key="movie.id">
-      <router-link :to="/film/ + movie.id">
-        <img v-if="movie.poster_path" :src="url(movie.poster_path)" alt="" />
+    <slide v-for="actor of actors" v-bind:key="actor.id">
+      <figure>
+        <img v-if="actor.profile_path" :src="url(actor.profile_path)" alt="" />
         <img
           v-else
           :src="require('@/Images/image-non-disponible.png')"
           alt=""
         />
-      </router-link>
+        <figcaption>
+          <h4>{{ actor.name }}</h4>
+          <h5>{{ actor.character }}</h5>
+        </figcaption>
+      </figure>
     </slide>
   </hooper>
 </template>
@@ -16,10 +20,10 @@
 <script>
 import { Hooper, Slide } from "hooper";
 import "hooper/dist/hooper.css";
-import { mapState } from "vuex";
 
 export default {
-  name: "CarouselVue",
+  props: ["actors"],
+  name: "CarouselActors",
   components: {
     Hooper,
     Slide,
@@ -27,15 +31,13 @@ export default {
   data: function () {
     return {
       hooperSettings: {
+        itemsToShow: 4,
         autoPlay: true,
         playSpeed: 5000,
       },
     };
   },
-  computed: mapState(["carouselData"]),
-  created: function () {
-    this.$store.dispatch("getCarouselData");
-  },
+
   methods: {
     url: function (link) {
       return `https://image.tmdb.org/t/p/w500${link}`;
@@ -53,15 +55,22 @@ h6 {
 }
 .hooper {
   height: auto;
+  width: 50vw;
+}
+li {
+  width: 250px;
 }
 img {
-  height: 45vh;
+  width: 250px;
   object-fit: contain;
+}
+li {
+  padding-right: 15px;
 }
 
 @media screen and (max-width: 800px) {
   img {
-    height: 50vh;
+    height: 20vh;
   }
 }
 </style>

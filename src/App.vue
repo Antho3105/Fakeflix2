@@ -27,9 +27,6 @@
   </body>
 </template>
 
-
-
-
 <script>
 import { mapState } from "vuex";
 import SiteFooter from "@/components/Footer.vue";
