@@ -17,7 +17,11 @@ export default {
   components: {
     ListView,
   },
-
+  data: function () {
+    return {
+      section: [],
+    };
+  },
   computed: {
     ...mapState(["myFavorites"]),
   },

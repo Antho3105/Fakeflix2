@@ -262,6 +262,7 @@ iframe {
 #trailer {
   text-align: center;
   font-size: 22px;
+  padding-top: 15px;
 }
 
 .appear-enter-active,

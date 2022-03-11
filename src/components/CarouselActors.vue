@@ -2,12 +2,18 @@
   <hooper :settings="hooperSettings" id="carousel">
     <slide v-for="actor of actors" v-bind:key="actor.id">
       <figure>
-        <img v-if="actor.profile_path" :src="url(actor.profile_path)" alt="" />
-        <img
-          v-else
-          :src="require('@/Images/image-non-disponible.png')"
-          alt=""
-        />
+        <router-link :to="/artiste/ + actor.id">
+          <img
+            v-if="actor.profile_path"
+            :src="url(actor.profile_path)"
+            alt=""
+          />
+          <img
+            v-else
+            :src="require('@/Images/image-non-disponible.png')"
+            alt=""
+          />
+        </router-link>
         <figcaption>
           <h4>{{ actor.name }}</h4>
           <h5>{{ actor.character }}</h5>
@@ -57,15 +63,12 @@ h6 {
   height: auto;
   width: 50vw;
 }
-li {
-  width: 250px;
+figure {
+  height: 250px;
 }
 img {
-  width: 250px;
+  width: 150px;
   object-fit: contain;
-}
-li {
-  padding-right: 15px;
 }
 
 @media screen and (max-width: 800px) {
