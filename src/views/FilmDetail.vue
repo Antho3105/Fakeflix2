@@ -1,9 +1,7 @@
 <template>
   <main>
     <section
-      v-if="
-        movieData.id && adultConsent === true && this.$route.path != '/film'
-      "
+      v-if="movieData.id && showData === true && this.$route.path != '/film'"
       class="conteneur"
     >
       <div v-if="movieVideoKey" id="trailer">
@@ -18,76 +16,82 @@
       <div v-else id="trailer">
         <p>Pas de bande annonce pour ce film</p>
       </div>
-      <transition name="appear">
-        <div class="flex" id="details">
-          <a
-            :href="getUrl()"
-            :title="'Affiche ' + movieData.original_title"
-            target="_blank"
-            ><img :src="getUrl()" :alt="'Affiche ' + movieData.original_title"
-          /></a>
+      <div class="flex" id="details">
+        <a
+          :href="getUrl()"
+          :title="'Affiche ' + movieData.original_title"
+          target="_blank"
+          ><img :src="getUrl()" :alt="'Affiche ' + movieData.original_title"
+        /></a>
 
-          <div class="movieData">
-            <h2>{{ movieData.original_title }}</h2>
-            <p>Date de sortie : {{ dateSortie }}</p>
-            <p>Durée : {{ length }}</p>
-            <h3>Résumé</h3>
-            <p>{{ movieData.overview }}</p>
-            <h3>Informations :</h3>
-            <ul>
-              <li>Budget : {{ budget }} $</li>
-              <li>Popularité : {{ movieData.popularity }}</li>
-              <li>note : {{ movieData.vote_average }}</li>
-              <li>Nombre de vote : {{ movieData.vote_count }}</li>
-            </ul>
-            <div class="flex buttons">
-              <button v-if="!isInFavorites" @click="addToFavorites()">
-                Ajouter à mes favoris
-              </button>
-              <button v-if="isInFavorites" @click="removeFromFavorites()">
-                Retirer des favoris
-              </button>
-              <button v-if="!isInWatchList" @click="addToWatchList()">
-                Ajouter aux films à voir
-              </button>
-              <button v-if="isInWatchList" @click="removeFromWatchList()">
-                Retirer des films à voir
-              </button>
-            </div>
-          </div>
-          <div id="casting">
-            <h2>Acteurs du film</h2>
-            <CarouselActors v-bind:actors="actors" />
+        <div class="movieData">
+          <h2>{{ movieData.original_title }}</h2>
+          <p>Date de sortie : {{ dateSortie }}</p>
+          <p>Durée : {{ length }}</p>
+          <h3>Résumé</h3>
+          <p>{{ movieData.overview }}</p>
+          <h3>Informations :</h3>
+          <ul>
+            <li>Budget : {{ budget }} $</li>
+            <li>Popularité : {{ movieData.popularity }}</li>
+            <li>note : {{ movieData.vote_average }}</li>
+            <li>Nombre de vote : {{ movieData.vote_count }}</li>
+          </ul>
+          <div v-if="movieData.adult == false" class="flex buttons">
+            <button v-if="!isInFavorites" @click="addToFavorites()">
+              Ajouter à mes favoris
+            </button>
+            <button v-if="isInFavorites" @click="removeFromFavorites()">
+              Retirer des favoris
+            </button>
+            <button v-if="!isInWatchList" @click="addToWatchList()">
+              Ajouter aux films à voir
+            </button>
+            <button v-if="isInWatchList" @click="removeFromWatchList()">
+              Retirer des films à voir
+            </button>
           </div>
         </div>
-      </transition>
+        <div id="casting">
+          <h2>Acteurs du film</h2>
+          <CarouselActors v-bind:actors="actors" />
+        </div>
+      </div>
     </section>
-    <section v-else-if="adultConsent === false" class="conteneur">
+    <section v-else-if="showData === false" class="conteneur">
       <h2>Contenu bloqué</h2>
     </section>
+    <ModalBox />
   </main>
 </template>
 
 
 <script>
 import { mapGetters } from "vuex";
+import { mapState } from "vuex";
 import CarouselActors from "@/components/CarouselActors.vue";
+import ModalBox from "@/components/ModalBox.vue";
 export default {
   name: "FilmDetail",
   components: {
     CarouselActors,
+    ModalBox,
   },
   data: function () {
     return {
       movieData: {},
       movieVideoKey: "",
       movieActors: [],
-      adultConsent: null,
       movieProductors: [],
+      reveal: true,
     };
   },
   computed: {
     ...mapGetters(["favoritesFilmsId", "watchListFilmsId"]),
+    ...mapState(["adultConsent"]),
+    showData: function () {
+      return this.movieData.adult && this.adultConsent != true ? false : true;
+    },
     dateSortie: function () {
       return new Date(this.movieData.release_date).toLocaleDateString("fr-FR", {
         weekday: "long",
@@ -179,15 +183,15 @@ export default {
       return `https://www.youtube.com/embed/` + this.movieVideoKey;
     },
 
-    //verif
+    //confirmation contenu adulte
     checkAdult: function () {
-      if (this.movieData.adult === true) {
-        if (confirm("contenu adulte") === true) {
-          this.adultConsent = true;
-        } else {
-          this.adultConsent = false;
-        }
-      } else this.adultConsent = true;
+      if (this.movieData.adult) {
+        this.$store.commit("adultConsent", false);
+        this.$store.commit("modalReveal", true);
+      } else {
+        this.$store.commit("modalReveal", false);
+        this.$store.commit("adultConsent", null);
+      }
     },
     addToFavorites: function () {
       this.$store.dispatch("Favorites", {

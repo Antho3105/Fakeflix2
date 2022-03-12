@@ -33,6 +33,8 @@ export default new Vuex.Store({
     userName: "",
     isLogged: false,
     loggingError: "",
+    modalReveal: false,
+    adultConsent: null,
   },
 
 
@@ -134,9 +136,16 @@ export default new Vuex.Store({
         this.state.loggingError = "Connecté"
     },
 
+    modalReveal(state, value) {
+      this.state.modalReveal = value
+    },
+    adultConsent(state, value) {
+      this.state.adultConsent = value
+    },
 
-    //------------- actions (dispatch) ---------------------------------------------
   },
+
+  //------------- actions (dispatch) ---------------------------------------------
   actions: {
     // recherche films
     search: async function () {
